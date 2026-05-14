@@ -1,0 +1,213 @@
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  LayoutDashboard, BarChart2, Bell, Terminal, Wrench,
+  Settings, Info, ChevronLeft, ChevronRight, Wifi, WifiOff, Play, Pause, AlertTriangle
+} from 'lucide-react';
+import { useMonitoring } from './hooks/useMonitoring';
+import { Dashboard } from './pages/Dashboard';
+import { Analytics } from './pages/Analytics';
+import { AlertsPage } from './pages/AlertsPage';
+import { SystemLogsPage } from './pages/SystemLogsPage';
+import { MaintenancePage } from './pages/MaintenancePage';
+import { SettingsPage } from './pages/SettingsPage';
+import { AboutPage } from './pages/AboutPage';
+
+type Page = 'dashboard' | 'analytics' | 'alerts' | 'logs' | 'maintenance' | 'settings' | 'about';
+
+const navItems = [
+  { id: 'dashboard' as Page, label: 'Dashboard', icon: <LayoutDashboard size={16} /> },
+  { id: 'analytics' as Page, label: 'Analytics', icon: <BarChart2 size={16} /> },
+  { id: 'alerts' as Page, label: 'Alerts', icon: <Bell size={16} /> },
+  { id: 'logs' as Page, label: 'System Logs', icon: <Terminal size={16} /> },
+  { id: 'maintenance' as Page, label: 'Maintenance', icon: <Wrench size={16} /> },
+  { id: 'settings' as Page, label: 'Settings', icon: <Settings size={16} /> },
+  { id: 'about' as Page, label: 'About Project', icon: <Info size={16} /> },
+];
+
+const pageTitles: Record<Page, string> = {
+  dashboard: 'Real-Time Monitoring Dashboard',
+  analytics: 'Sensor Analytics & Trends',
+  alerts: 'Alert Management System',
+  logs: 'System Event Logs',
+  maintenance: 'Predictive Maintenance',
+  settings: 'System Configuration',
+  about: 'Project Architecture',
+};
+
+function Clock() {
+  const [time, setTime] = useState(new Date());
+  useEffect(() => {
+    const t = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <div className="text-right">
+      <div className="text-sm font-mono font-bold text-cyan-400">{time.toLocaleTimeString('en', { hour12: false })}</div>
+      <div className="text-[9px] font-mono text-[#3a4a5a]">{time.toLocaleDateString('en', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</div>
+    </div>
+  );
+}
+
+export default function App() {
+  const [page, setPage] = useState<Page>('dashboard');
+  const [collapsed, setCollapsed] = useState(false);
+
+  const {
+    currentData, history, alerts, logs, deviceStatus, predictions,
+    pumpState, pumpMode, isMonitoring,
+    acknowledgeAlert, clearAlerts, sendCommand, toggleMode, toggleMonitoring,
+  } = useMonitoring();
+
+  const unackedFaults = alerts.filter(a => !a.acknowledged && a.type === 'fault').length;
+  const unackedAlerts = alerts.filter(a => !a.acknowledged).length;
+
+  return (
+    <div className="flex h-screen bg-[#060b12] text-[#c0d0e0] overflow-hidden">
+      <motion.aside
+        animate={{ width: collapsed ? 56 : 220 }}
+        transition={{ duration: 0.2, ease: 'easeInOut' }}
+        className="flex-shrink-0 bg-[#070d13] border-r border-[#1e2d3d] flex flex-col overflow-hidden z-20"
+      >
+        <div className="h-14 flex items-center px-3 border-b border-[#1e2d3d] gap-2 shrink-0">
+          <div className="w-8 h-8 rounded border border-cyan-500/40 bg-cyan-500/10 flex items-center justify-center shrink-0">
+            <div className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse" />
+          </div>
+          <AnimatePresence>
+            {!collapsed && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <div className="text-[10px] font-mono font-bold text-cyan-400 leading-tight">PLC MONITOR</div>
+                <div className="text-[8px] font-mono text-[#3a4a5a] leading-tight">PREDICTIVE MAINT.</div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <nav className="flex-1 py-3 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+          {navItems.map(item => {
+            const active = page === item.id;
+            const badge = item.id === 'alerts' && unackedAlerts > 0 ? unackedAlerts : 0;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setPage(item.id)}
+                className={`flex items-center gap-3 px-3 py-2.5 mb-0.5 mx-1 rounded-md text-left transition-all relative ${
+                  active ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/25' : 'text-[#4a6070] hover:text-[#8a9aaa] hover:bg-[#0d1520]'
+                }`}
+                style={{ width: 'calc(100% - 8px)' }}
+              >
+                <span className="shrink-0">{item.icon}</span>
+                <AnimatePresence>
+                  {!collapsed && (
+                    <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-xs font-mono truncate">
+                      {item.label}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+                {badge > 0 && (
+                  <span className="absolute top-1 right-1 text-[8px] bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center font-mono">
+                    {badge > 9 ? '9+' : badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </nav>
+
+        <button
+          onClick={() => setCollapsed(c => !c)}
+          className="m-2 p-2 rounded border border-[#1e2d3d] text-[#3a4a5a] hover:text-[#7a8899] transition-all flex items-center justify-center cursor-pointer"
+        >
+          {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
+        </button>
+      </motion.aside>
+
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
+        <header className="h-14 bg-[#070d13] border-b border-[#1e2d3d] flex items-center justify-between px-4 shrink-0">
+          <div className="flex items-center gap-3">
+            {unackedFaults > 0 && (
+              <motion.div
+                animate={{ opacity: [1, 0.4, 1] }}
+                transition={{ duration: 0.8, repeat: Infinity }}
+                className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/40 text-red-400 rounded px-2 py-1 text-[9px] font-mono"
+              >
+                <AlertTriangle size={10} /> {unackedFaults} FAULT{unackedFaults > 1 ? 'S' : ''} ACTIVE
+              </motion.div>
+            )}
+            <div>
+              <div className="text-xs font-mono text-[#c0d0e0]">{pageTitles[page]}</div>
+              <div className="text-[9px] font-mono text-[#3a4a5a]">Water Pumping Industry — PLC Predictive Maintenance</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleMonitoring}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded border text-[9px] font-mono font-bold tracking-wide transition-all cursor-pointer ${
+                isMonitoring ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-[#0d1117] border-[#1e2d3d] text-[#4a5568]'
+              }`}
+            >
+              {isMonitoring ? <><Play size={9} /> LIVE</> : <><Pause size={9} /> PAUSED</>}
+            </button>
+            <div className="flex items-center gap-1.5">
+              {deviceStatus.esp32 === 'online' ? <Wifi size={11} className="text-emerald-400" /> : <WifiOff size={11} className="text-red-400" />}
+              <span className="text-[9px] font-mono text-[#4a5568]">{deviceStatus.plcBrand}</span>
+            </div>
+            <div className={`flex items-center gap-1.5 px-2 py-1 rounded border text-[9px] font-mono font-bold ${
+              currentData.status === 'healthy' ? 'border-emerald-500/30 text-emerald-400 bg-emerald-500/10' :
+              currentData.status === 'warning' ? 'border-amber-500/30 text-amber-400 bg-amber-500/10' :
+              'border-red-500/40 text-red-400 bg-red-500/10'
+            }`}>
+              <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                currentData.status === 'healthy' ? 'bg-emerald-400' : currentData.status === 'warning' ? 'bg-amber-400' : 'bg-red-400'
+              }`} />
+              {currentData.status.toUpperCase()}
+            </div>
+            <Clock />
+          </div>
+        </header>
+
+        <main className="flex-1 overflow-y-auto p-4" style={{ scrollbarWidth: 'thin', scrollbarColor: '#1e2d3d transparent' }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={page}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.15 }}
+              className="h-full"
+            >
+              {page === 'dashboard' && (
+                <Dashboard
+                  currentData={currentData} history={history} deviceStatus={deviceStatus}
+                  alerts={alerts} pumpState={pumpState} pumpMode={pumpMode}
+                  onCommand={sendCommand} onToggleMode={toggleMode}
+                  onAcknowledgeAlert={acknowledgeAlert} onClearAlerts={clearAlerts}
+                />
+              )}
+              {page === 'analytics' && <Analytics history={history} currentData={currentData} />}
+              {page === 'alerts' && <AlertsPage alerts={alerts} onAcknowledge={acknowledgeAlert} onClear={clearAlerts} />}
+              {page === 'logs' && <SystemLogsPage logs={logs} />}
+              {page === 'maintenance' && <MaintenancePage predictions={predictions} currentData={currentData} />}
+              {page === 'settings' && <SettingsPage />}
+              {page === 'about' && <AboutPage />}
+            </motion.div>
+          </AnimatePresence>
+        </main>
+
+        <footer className="h-6 bg-[#040810] border-t border-[#1e2d3d] flex items-center px-4 gap-4 shrink-0">
+          <span className="text-[8px] font-mono text-[#2a3a4a]">PLC-PREDICTIVE-MAINTENANCE v1.0.0</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a]">|</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a]">SIMULATION MODE</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a]">|</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a]">Protocol: {deviceStatus.protocol}</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a]">|</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a]">Samples: {history.length}</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a]">|</span>
+          <span className={`text-[8px] font-mono ${currentData.status === 'healthy' ? 'text-emerald-700' : currentData.status === 'warning' ? 'text-amber-700' : 'text-red-700'}`}>
+            HI: {currentData.healthIndex.toFixed(3)}
+          </span>
+        </footer>
+      </div>
+    </div>
+  );
+}

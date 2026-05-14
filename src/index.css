@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-industrial-bg: #060b12;
+  --color-industrial-card: #070d13;
+  --color-industrial-border: #1e2d3d;
+  --color-industrial-text: #c0d0e0;
+  --color-industrial-muted: #3a4a5a;
+  --color-industrial-cyan: #00bcd4;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background-color: var(--color-industrial-bg);
+  color: var(--color-industrial-text);
+}
