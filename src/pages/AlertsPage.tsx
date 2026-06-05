@@ -6,12 +6,12 @@ export function AlertsPage({ alerts, onAcknowledge, onClear }: { alerts: Alert[]
   return (
     <div className="bg-[#070d13] border border-[#1e2d3d] rounded h-full flex flex-col">
       <div className="p-4 border-b border-[#1e2d3d] flex justify-between items-center shrink-0">
-        <div className="text-sm font-mono text-[#4a6070]">ACTIVE SYSTEM ALERTS</div>
+        <div className="text-sm font-semibold text-[#8a9aaa] tracking-wide">ACTIVE SYSTEM ALERTS</div>
         <button 
           onClick={onClear}
-          className="flex items-center gap-2 px-3 py-1.5 text-[10px] font-mono rounded bg-[#0d1520] border border-[#1e2d3d] text-[#8a9aaa] hover:text-[#c0d0e0] hover:bg-[#15202b] transition-all"
+          className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold tracking-wide rounded bg-[#0d1520] border border-[#1e2d3d] text-[#8a9aaa] hover:text-[#c0d0e0] hover:bg-[#15202b] transition-all"
         >
-          <Trash2 size={12} /> CLEAR ACKNOWLEDGED
+          <Trash2 size={14} /> CLEAR ACKNOWLEDGED
         </button>
       </div>
       
@@ -20,7 +20,7 @@ export function AlertsPage({ alerts, onAcknowledge, onClear }: { alerts: Alert[]
           {alerts.length === 0 && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center h-full text-[#4a6070] gap-3">
               <CheckCircle size={32} className="text-emerald-500/50" />
-              <span className="font-mono text-xs">NO ACTIVE ALERTS</span>
+              <span className="font-bold text-sm tracking-wide">NO ACTIVE ALERTS</span>
             </motion.div>
           )}
           {alerts.map((alert) => (
@@ -44,17 +44,17 @@ export function AlertsPage({ alerts, onAcknowledge, onClear }: { alerts: Alert[]
                   <AlertTriangle size={16} />
                 </div>
                 <div>
-                  <div className={`font-mono text-sm font-bold ${
+                  <div className={`text-base font-bold tracking-wide ${
                     alert.acknowledged ? 'text-[#8a9aaa]' :
                     alert.type === 'fault' ? 'text-red-400' : 'text-amber-400'
                   }`}>
                     {alert.message}
                   </div>
                   <div className="flex items-center gap-3 mt-1">
-                    <span className="text-[10px] font-mono text-[#4a6070]">
+                    <span className="text-xs text-[#8a9aaa]">
                       {new Date(alert.timestamp).toLocaleString()}
                     </span>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#060b12] text-[#8a9aaa] uppercase border border-[#1e2d3d]">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded bg-[#060b12] text-[#8a9aaa] uppercase border border-[#1e2d3d]">
                       {alert.source}
                     </span>
                   </div>
@@ -63,7 +63,7 @@ export function AlertsPage({ alerts, onAcknowledge, onClear }: { alerts: Alert[]
               {!alert.acknowledged && (
                 <button 
                   onClick={() => onAcknowledge(alert.id)}
-                  className={`px-4 py-2 text-xs font-mono rounded border transition-all ${
+                  className={`px-4 py-2 text-xs font-bold tracking-wide rounded border transition-all ${
                     alert.type === 'fault' ? 'bg-red-500/20 border-red-500/50 text-red-100 hover:bg-red-500/40' :
                     'bg-amber-500/20 border-amber-500/50 text-amber-100 hover:bg-amber-500/40'
                   }`}
@@ -72,8 +72,8 @@ export function AlertsPage({ alerts, onAcknowledge, onClear }: { alerts: Alert[]
                 </button>
               )}
               {alert.acknowledged && (
-                <span className="text-[10px] font-mono text-[#4a6070] flex items-center gap-1">
-                  <CheckCircle size={10} /> ACKNOWLEDGED
+                <span className="text-xs text-[#8a9aaa] font-semibold tracking-wide flex items-center gap-1.5">
+                  <CheckCircle size={14} /> ACKNOWLEDGED
                 </span>
               )}
             </motion.div>

@@ -21,13 +21,13 @@ export function SystemLogsPage({ logs }: { logs: SystemLog[] }) {
       <div className="p-3 border-b border-[#1e2d3d] flex items-center justify-between bg-[#0a1118]">
         <div className="flex items-center gap-3">
           <Terminal size={16} className="text-[#4a6070]" />
-          <span className="text-[#8a9aaa] text-xs">SYSTEM_EVENT_LOGGER.EXE</span>
+          <span className="text-[#8a9aaa] text-sm font-semibold tracking-wide">SYSTEM_EVENT_LOGGER.EXE</span>
         </div>
         <button 
           onClick={exportToCSV}
-          className="flex items-center gap-2 px-3 py-1 bg-[#0d1520] border border-[#1e2d3d] text-[#8a9aaa] rounded text-[10px] hover:text-[#c0d0e0] hover:bg-[#1a2636] transition-all"
+          className="flex items-center gap-2 px-3 py-1 bg-[#0d1520] border border-[#1e2d3d] text-[#8a9aaa] rounded text-xs hover:text-[#c0d0e0] hover:bg-[#1a2636] transition-all font-bold tracking-wide"
         >
-          <Download size={12} /> EXPORT CSV
+          <Download size={14} /> EXPORT CSV
         </button>
       </div>
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-1" style={{ scrollbarWidth: 'thin', scrollbarColor: '#1e2d3d transparent' }}>
@@ -48,7 +48,7 @@ export function SystemLogsPage({ logs }: { logs: SystemLog[] }) {
             }`}>
               {log.event}
             </span>
-            <span className="text-[#3a4a5a] text-[10px] shrink-0 uppercase opacity-0 group-hover:opacity-100 transition-opacity mt-1">
+            <span className="text-[#3a4a5a] text-xs shrink-0 uppercase opacity-0 group-hover:opacity-100 transition-opacity mt-1">
               USR: {log.user || 'SYSTEM'}
             </span>
           </div>

@@ -21,7 +21,7 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
     <div className="flex flex-col gap-4 min-h-full">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 shrink-0">
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-xs font-mono text-[#4a6070] mb-2">WINDING TEMP (°C)</div>
+          <div className="text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2">WINDING TEMP (°C)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
@@ -36,7 +36,7 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
         </div>
 
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-xs font-mono text-[#4a6070] mb-2">BEARING TEMP (°C)</div>
+          <div className="text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2">BEARING TEMP (°C)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
@@ -51,7 +51,7 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
         </div>
 
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-xs font-mono text-[#4a6070] mb-2">AMBIENT TEMP (°C)</div>
+          <div className="text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2">AMBIENT TEMP (°C)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
@@ -66,7 +66,7 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
         </div>
 
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-xs font-mono text-[#4a6070] mb-2">MOTOR CURRENT (A)</div>
+          <div className="text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2">MOTOR CURRENT (A)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
@@ -81,7 +81,7 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
         </div>
 
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-xs font-mono text-[#4a6070] mb-2">PUMP SPEED (RPM)</div>
+          <div className="text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2">PUMP SPEED (RPM)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
@@ -96,7 +96,7 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
         </div>
 
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-xs font-mono text-[#4a6070] mb-2 flex justify-between">
+          <div className="text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2 flex justify-between">
             <span>HEALTH INDEX</span>
             <span className={`font-bold ${currentData.status === 'healthy' ? 'text-emerald-400' : currentData.status === 'warning' ? 'text-amber-400' : 'text-red-400'}`}>
               {(currentData.healthIndex * 100).toFixed(1)}%
@@ -120,13 +120,13 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
         <div className="p-3 border-b border-[#1e2d3d] flex items-center justify-between bg-[#0a1118] shrink-0">
           <div className="flex items-center gap-3">
             <Table size={16} className="text-[#4a6070]" />
-            <span className="text-[#8a9aaa] text-xs font-mono">HISTORICAL DATA LOGS</span>
+            <span className="text-[#8a9aaa] text-sm font-semibold tracking-wide">HISTORICAL DATA LOGS</span>
           </div>
           <button 
             onClick={exportToCSV}
-            className="flex items-center gap-2 px-3 py-1 bg-[#0d1520] border border-[#1e2d3d] text-[#8a9aaa] rounded text-[10px] hover:text-[#c0d0e0] hover:bg-[#1a2636] transition-all font-mono"
+            className="flex items-center gap-2 px-3 py-1 bg-[#0d1520] border border-[#1e2d3d] text-[#8a9aaa] rounded text-xs hover:text-[#c0d0e0] hover:bg-[#1a2636] transition-all font-bold tracking-wide"
           >
-            <Download size={12} /> EXPORT CSV
+            <Download size={14} /> EXPORT CSV
           </button>
         </div>
         <div className="flex-1 overflow-auto p-0" style={{ scrollbarWidth: 'thin', scrollbarColor: '#1e2d3d transparent' }}>
