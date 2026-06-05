@@ -37,12 +37,12 @@ const StatCard = ({ title, value, unit, status, icon: Icon, onClick, clickable }
     status === 'warning' ? 'border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.1)]' : 
     'border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.2)]'
   } ${clickable ? 'cursor-pointer hover:bg-[#0d1520] transition-colors group' : ''}`}>
-    <div className="flex justify-between items-center text-[#8a9aaa] text-xs font-semibold tracking-wide">
+    <div className="flex justify-between items-center text-[#8a9aaa] text-[10px] md:text-xs font-semibold tracking-wide">
       <span className={`${clickable ? 'group-hover:text-[#c0d0e0] transition-colors' : ''}`}>{title}</span>
-      <Icon size={16} className={
+      <Icon className={`w-3 h-3 md:w-4 md:h-4 ${
         status === 'healthy' ? 'text-emerald-500' : 
         status === 'warning' ? 'text-amber-500' : 'text-red-500 animate-pulse'
-      } />
+      }`} />
     </div>
     <div className="flex items-baseline gap-1">
       <span className={`text-3xl font-mono ${
@@ -51,7 +51,7 @@ const StatCard = ({ title, value, unit, status, icon: Icon, onClick, clickable }
       }`}>
         {value}
       </span>
-      <span className="text-[#8a9aaa] text-sm ml-1 font-semibold">{unit}</span>
+      <span className="text-[#8a9aaa] text-xs md:text-sm lg:text-base ml-1 font-semibold">{unit}</span>
     </div>
   </div>
 );
@@ -110,7 +110,7 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
       <div className="col-span-12 lg:col-span-8 flex flex-col gap-4">
         {/* Real-time Trend Chart */}
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 h-80">
-          <div className="text-sm font-semibold text-[#8a9aaa] mb-4">REAL-TIME SENSOR TRENDS</div>
+          <div className="text-sm md:text-base font-semibold text-[#8a9aaa] mb-4">REAL-TIME SENSOR TRENDS</div>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={history}>
               <CartesianGrid strokeDasharray="3 3" stroke="#1e2d3d" />
@@ -131,7 +131,7 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
       <div className="col-span-12 lg:col-span-4 flex flex-col gap-4">
         {/* Health Index Gauge */}
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col items-center justify-center relative overflow-hidden h-48">
-          <div className="text-sm font-semibold text-[#8a9aaa] absolute top-4 left-4">HEALTH INDEX</div>
+          <div className="text-sm md:text-base font-semibold text-[#8a9aaa] absolute top-4 left-4">HEALTH INDEX</div>
           <div className="relative flex items-center justify-center mt-4">
              <svg width="120" height="120" viewBox="0 0 120 120" className="rotate-[-90deg]">
                 <circle cx="60" cy="60" r="50" fill="none" stroke="#1e2d3d" strokeWidth="8" />
@@ -143,35 +143,35 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
                 />
              </svg>
              <div className="absolute flex flex-col items-center">
-               <span className={`text-2xl font-mono font-bold ${
+               <span className={`text-2xl md:text-3xl font-mono font-bold ${
                   currentData.status === 'healthy' ? 'text-emerald-400' : currentData.status === 'warning' ? 'text-amber-400' : 'text-red-400'
                }`}>
                  {(currentData.healthIndex * 100).toFixed(0)}%
                </span>
-               <span className="text-xs text-[#8a9aaa] font-semibold uppercase mt-1">{currentData.status}</span>
+               <span className="text-[10px] md:text-xs text-[#8a9aaa] font-semibold uppercase mt-1">{currentData.status}</span>
              </div>
           </div>
         </div>
 
         {/* System Status Panel */}
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col gap-3">
-          <div className="text-sm font-semibold text-[#8a9aaa] mb-1">SYSTEM DIAGNOSTICS</div>
+          <div className="text-sm md:text-base font-semibold text-[#8a9aaa] mb-1">SYSTEM DIAGNOSTICS</div>
           
-          <div className="flex justify-between items-center text-xs">
+          <div className="flex justify-between items-center text-[10px] md:text-xs">
             <span className="text-[#8a9aaa]">SYSTEM UPTIME:</span>
             <span className="text-[#c0d0e0] bg-[#0d1520] px-2 py-0.5 rounded font-mono">{formatTime(systemUptime)}</span>
           </div>
-          <div className="flex justify-between items-center text-xs">
+          <div className="flex justify-between items-center text-[10px] md:text-xs">
             <span className="text-[#8a9aaa]">PUMP RUNTIME:</span>
             <span className="text-[#c0d0e0] bg-[#0d1520] px-2 py-0.5 rounded font-mono">{formatTime(pumpRuntime)}</span>
           </div>
-          <div className="flex justify-between items-center text-xs">
+          <div className="flex justify-between items-center text-[10px] md:text-xs">
             <span className="text-[#8a9aaa]">LAST FAULT:</span>
             <span className={`font-mono ${lastFaultTimestamp ? "text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded" : "text-[#4a6070]"}`}>
               {lastFaultTimestamp ? new Date(lastFaultTimestamp).toLocaleTimeString() : 'NONE'}
             </span>
           </div>
-          <div className="flex justify-between items-center text-xs">
+          <div className="flex justify-between items-center text-[10px] md:text-xs">
             <span className="text-[#8a9aaa]">AUTO-SHUTDOWN:</span>
             <span className={`px-2 py-0.5 rounded font-semibold ${pumpMode === 'auto' ? "text-emerald-400 bg-emerald-500/10" : "text-[#8a9aaa] bg-[#0d1520]"}`}>
               {pumpMode === 'auto' ? 'ARMED' : 'DISABLED'}
@@ -182,9 +182,9 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
         {/* Component Lifespan Mini Panel */}
         {predictions.length > 0 && (
           <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col gap-3">
-            <div className="text-sm font-semibold text-[#8a9aaa]">CRITICAL LIFESPAN</div>
+            <div className="text-sm md:text-base font-semibold text-[#8a9aaa]">CRITICAL LIFESPAN</div>
             {predictions.slice().sort((a, b) => a.estimatedDaysRemaining - b.estimatedDaysRemaining).slice(0, 2).map((pred, i) => (
-              <div key={i} className="flex justify-between items-center text-xs border-b border-[#1e2d3d] pb-2 last:border-0 last:pb-0">
+              <div key={i} className="flex justify-between items-center text-[10px] md:text-xs border-b border-[#1e2d3d] pb-2 last:border-0 last:pb-0">
                 <span className="text-[#c0d0e0] truncate mr-2 font-medium">{pred.component.toUpperCase()}</span>
                 <span className={`px-2 py-0.5 rounded font-bold ${pred.estimatedDaysRemaining < 60 ? 'text-amber-400 bg-amber-500/10' : 'text-emerald-400 bg-emerald-500/10'}`}>
                   {pred.estimatedDaysRemaining} DAYS
@@ -197,8 +197,8 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
         {/* Pump Controls */}
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4">
           <div className="flex justify-between items-center mb-4">
-            <div className="text-sm font-semibold text-[#8a9aaa]">PUMP CONTROL PANEL</div>
-            <button onClick={onToggleMode} className={`px-3 py-1.5 text-xs font-bold rounded border transition-colors ${
+            <div className="text-sm md:text-base font-semibold text-[#8a9aaa]">PUMP CONTROL PANEL</div>
+            <button onClick={onToggleMode} className={`px-3 py-1.5 text-[10px] md:text-xs font-bold rounded border transition-colors ${
               pumpMode === 'auto' ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400' : 'bg-[#1e2d3d] border-[#3a4a5a] text-[#c0d0e0]'
             }`}>
               {pumpMode.toUpperCase()} MODE
@@ -206,8 +206,8 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
           </div>
 
           <div className="flex items-center justify-between mb-4 bg-[#0a1118] border border-[#1e2d3d] p-3 rounded">
-            <span className="text-xs font-semibold text-[#8a9aaa]">STATUS:</span>
-            <span className={`text-xs font-bold px-3 py-1 rounded tracking-wide ${
+            <span className="text-[10px] md:text-xs font-semibold text-[#8a9aaa]">STATUS:</span>
+            <span className={`text-[10px] md:text-xs font-bold px-3 py-1 rounded tracking-wide ${
               pumpState === 'running' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
               pumpState === 'error' ? 'bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse' :
               'bg-[#1e2d3d] text-[#8a9aaa] border border-[#3a4a5a]'
@@ -251,34 +251,34 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
 
         {/* Manual Data Injection */}
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col gap-4">
-          <div className="text-sm font-semibold text-[#8a9aaa]">MANUAL DATA INJECTION</div>
+          <div className="text-sm md:text-base font-semibold text-[#8a9aaa]">MANUAL DATA INJECTION</div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label className="text-xs text-[#8a9aaa] block mb-1">WINDING (°C)</label>
-              <input type="number" value={manualTempWinding} onChange={e => setManualTempWinding(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-sm font-mono outline-none focus:border-cyan-500/50" />
+              <label className="text-[10px] md:text-xs text-[#8a9aaa] block mb-1">WINDING (°C)</label>
+              <input type="number" value={manualTempWinding} onChange={e => setManualTempWinding(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-[10px] md:text-sm font-mono outline-none focus:border-cyan-500/50" />
             </div>
             <div>
-              <label className="text-xs text-[#8a9aaa] block mb-1">BEARING (°C)</label>
-              <input type="number" value={manualTempBearing} onChange={e => setManualTempBearing(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-sm font-mono outline-none focus:border-cyan-500/50" />
+              <label className="text-[10px] md:text-xs text-[#8a9aaa] block mb-1">BEARING (°C)</label>
+              <input type="number" value={manualTempBearing} onChange={e => setManualTempBearing(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-[10px] md:text-sm font-mono outline-none focus:border-cyan-500/50" />
             </div>
             <div>
-              <label className="text-xs text-[#8a9aaa] block mb-1">AMBIENT (°C)</label>
-              <input type="number" value={manualTempAmbient} onChange={e => setManualTempAmbient(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-sm font-mono outline-none focus:border-cyan-500/50" />
+              <label className="text-[10px] md:text-xs text-[#8a9aaa] block mb-1">AMBIENT (°C)</label>
+              <input type="number" value={manualTempAmbient} onChange={e => setManualTempAmbient(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-[10px] md:text-sm font-mono outline-none focus:border-cyan-500/50" />
             </div>
             <div>
-              <label className="text-xs text-[#8a9aaa] block mb-1">CURRENT (A)</label>
-              <input type="number" value={manualCurrent} onChange={e => setManualCurrent(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-sm font-mono outline-none focus:border-cyan-500/50" />
+              <label className="text-[10px] md:text-xs text-[#8a9aaa] block mb-1">CURRENT (A)</label>
+              <input type="number" value={manualCurrent} onChange={e => setManualCurrent(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-[10px] md:text-sm font-mono outline-none focus:border-cyan-500/50" />
             </div>
             <div className="col-span-1 md:col-span-2">
-              <label className="text-xs text-[#8a9aaa] block mb-1">SPEED (RPM)</label>
-              <input type="number" value={manualSpeed} onChange={e => setManualSpeed(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-sm font-mono outline-none focus:border-cyan-500/50" />
+              <label className="text-[10px] md:text-xs text-[#8a9aaa] block mb-1">SPEED (RPM)</label>
+              <input type="number" value={manualSpeed} onChange={e => setManualSpeed(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-[10px] md:text-sm font-mono outline-none focus:border-cyan-500/50" />
             </div>
           </div>
           <button 
             onClick={handleInject}
-            className="flex items-center justify-center gap-2 bg-[#0d1520] border border-cyan-500/30 text-cyan-400 p-3 rounded hover:bg-cyan-500/10 transition-all text-xs font-bold tracking-wider w-full mt-2"
+            className="flex items-center justify-center gap-2 bg-[#0d1520] border border-cyan-500/30 text-cyan-400 p-3 rounded hover:bg-cyan-500/10 transition-all text-[10px] md:text-xs font-bold tracking-wider w-full mt-2"
           >
-            <Send size={14} /> INJECT & PROCESS
+            <Send className="w-3 h-3 md:w-4 md:h-4" /> INJECT & PROCESS
           </button>
         </div>
       </div>

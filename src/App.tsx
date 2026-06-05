@@ -43,8 +43,8 @@ function Clock() {
   }, []);
   return (
     <div className="text-right">
-      <div className="text-sm font-mono font-bold text-cyan-400">{time.toLocaleTimeString('en', { hour12: false })}</div>
-      <div className="text-xs text-[#4a6070]">{time.toLocaleDateString('en', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</div>
+      <div className="text-xs md:text-sm lg:text-base font-mono font-bold text-cyan-400">{time.toLocaleTimeString('en', { hour12: false })}</div>
+      <div className="text-[10px] md:text-xs lg:text-sm text-[#4a6070]">{time.toLocaleDateString('en', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}</div>
     </div>
   );
 }
@@ -86,8 +86,8 @@ export default function App() {
           <AnimatePresence>
             {!collapsed && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <div className="text-sm font-bold text-cyan-400 leading-tight">PLC MONITOR</div>
-                <div className="text-xs text-[#4a6070] leading-tight mt-0.5">PREDICTIVE MAINT.</div>
+                <div className="text-sm md:text-base font-bold text-cyan-400 leading-tight">PLC MONITOR</div>
+                <div className="text-xs md:text-sm text-[#4a6070] leading-tight mt-0.5">PREDICTIVE MAINT.</div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -109,7 +109,7 @@ export default function App() {
                 <span className="shrink-0">{item.icon}</span>
                 <AnimatePresence>
                   {!collapsed && (
-                    <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-sm truncate">
+                    <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-sm md:text-base truncate">
                       {item.label}
                     </motion.span>
                   )}
@@ -139,34 +139,34 @@ export default function App() {
               <motion.div
                 animate={{ opacity: [1, 0.4, 1] }}
                 transition={{ duration: 0.8, repeat: Infinity }}
-                className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/40 text-red-400 rounded px-2 py-1 text-xs font-bold"
+                className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/40 text-red-400 rounded px-2 py-1 text-[10px] md:text-xs font-bold"
               >
-                <AlertTriangle size={12} /> {unackedFaults} FAULT{unackedFaults > 1 ? 'S' : ''} ACTIVE
+                <AlertTriangle size={12} className="md:w-4 md:h-4" /> {unackedFaults} FAULT{unackedFaults > 1 ? 'S' : ''} ACTIVE
               </motion.div>
             )}
             <div>
-              <div className="text-sm font-semibold text-[#c0d0e0]">{pageTitles[page]}</div>
-              <div className="text-xs text-[#4a6070] hidden sm:block mt-0.5">Water Pumping Industry — PLC Predictive Maintenance</div>
+              <div className="text-sm md:text-base lg:text-lg font-semibold text-[#c0d0e0]">{pageTitles[page]}</div>
+              <div className="text-xs md:text-sm text-[#4a6070] hidden sm:block mt-0.5">Water Pumping Industry — PLC Predictive Maintenance</div>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={toggleMonitoring}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded border text-xs font-bold tracking-wide transition-all cursor-pointer shrink-0 ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded border text-[10px] md:text-xs font-bold tracking-wide transition-all cursor-pointer shrink-0 ${
                 isMonitoring ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-[#0d1117] border-[#1e2d3d] text-[#4a5568]'
               }`}
             >
-              {isMonitoring ? <><Play size={12} /> LIVE</> : <><Pause size={12} /> PAUSED</>}
+              {isMonitoring ? <><Play className="w-3 h-3 md:w-4 md:h-4" /> LIVE</> : <><Pause className="w-3 h-3 md:w-4 md:h-4" /> PAUSED</>}
             </button>
             <div className="hidden md:flex items-center gap-1.5 shrink-0">
               {deviceStatus.esp32 === 'online' ? <Wifi size={14} className="text-emerald-400" /> : <WifiOff size={14} className="text-red-400" />}
-              <span className="text-xs text-[#4a6070]">{deviceStatus.plcBrand}</span>
+              <span className="text-xs md:text-sm text-[#4a6070]">{deviceStatus.plcBrand}</span>
             </div>
             <div className="hidden md:flex items-center gap-1.5 shrink-0">
               <Database size={14} className={deviceStatus.database === 'online' ? "text-orange-400" : "text-red-400"} />
-              <span className="text-xs text-[#4a6070]">MySQL</span>
+              <span className="text-xs md:text-sm text-[#4a6070]">MySQL</span>
             </div>
-            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded border text-xs font-bold shrink-0 ${
+            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded border text-[10px] md:text-xs font-bold shrink-0 ${
               currentData.status === 'healthy' ? 'border-emerald-500/30 text-emerald-400 bg-emerald-500/10' :
               currentData.status === 'warning' ? 'border-amber-500/30 text-amber-400 bg-amber-500/10' :
               'border-red-500/40 text-red-400 bg-red-500/10'
@@ -212,16 +212,16 @@ export default function App() {
           </AnimatePresence>
         </main>
 
-        <footer className="h-8 bg-[#040810] border-t border-[#1e2d3d] flex items-center px-4 gap-2 sm:gap-4 shrink-0 overflow-x-auto whitespace-nowrap scrollbar-none">
-          <span className="text-xs text-[#4a6070] hidden sm:inline">PLC-PREDICTIVE-MAINTENANCE v1.0.0</span>
-          <span className="text-xs text-[#4a6070] hidden sm:inline">|</span>
-          <span className="text-xs text-[#4a6070] hidden md:inline">SIMULATION MODE</span>
-          <span className="text-xs text-[#4a6070] hidden md:inline">|</span>
-          <span className="text-xs text-[#4a6070]">Protocol: <span className="font-mono">{deviceStatus.protocol}</span></span>
-          <span className="text-xs text-[#4a6070]">|</span>
-          <span className="text-xs text-[#4a6070] hidden sm:inline">Samples: <span className="font-mono">{history.length}</span></span>
-          <span className="text-xs text-[#4a6070] hidden sm:inline">|</span>
-          <span className={`text-xs ${currentData.status === 'healthy' ? 'text-emerald-600' : currentData.status === 'warning' ? 'text-amber-600' : 'text-red-600'}`}>
+        <footer className="h-8 md:h-10 lg:h-12 bg-[#040810] border-t border-[#1e2d3d] flex items-center px-4 gap-2 sm:gap-4 shrink-0 overflow-x-auto whitespace-nowrap scrollbar-none">
+          <span className="text-[10px] md:text-xs lg:text-sm text-[#4a6070] hidden sm:inline">PLC-PREDICTIVE-MAINTENANCE v1.0.0</span>
+          <span className="text-[10px] md:text-xs lg:text-sm text-[#4a6070] hidden sm:inline">|</span>
+          <span className="text-[10px] md:text-xs lg:text-sm text-[#4a6070] hidden md:inline">SIMULATION MODE</span>
+          <span className="text-[10px] md:text-xs lg:text-sm text-[#4a6070] hidden md:inline">|</span>
+          <span className="text-[10px] md:text-xs lg:text-sm text-[#4a6070]">Protocol: <span className="font-mono">{deviceStatus.protocol}</span></span>
+          <span className="text-[10px] md:text-xs lg:text-sm text-[#4a6070]">|</span>
+          <span className="text-[10px] md:text-xs lg:text-sm text-[#4a6070] hidden sm:inline">Samples: <span className="font-mono">{history.length}</span></span>
+          <span className="text-[10px] md:text-xs lg:text-sm text-[#4a6070] hidden sm:inline">|</span>
+          <span className={`text-[10px] md:text-xs lg:text-sm ${currentData.status === 'healthy' ? 'text-emerald-600' : currentData.status === 'warning' ? 'text-amber-600' : 'text-red-600'}`}>
             HI: <span className="font-mono font-bold">{currentData.healthIndex.toFixed(3)}</span>
           </span>
         </footer>
