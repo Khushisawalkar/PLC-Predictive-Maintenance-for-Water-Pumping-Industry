@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, BarChart2, Bell, Terminal, Wrench,
-  Settings, Info, ChevronLeft, ChevronRight, Wifi, WifiOff, Play, Pause, AlertTriangle
+  Settings, Info, ChevronLeft, ChevronRight, Wifi, WifiOff, Play, Pause, AlertTriangle, Database
 } from 'lucide-react';
 import { useMonitoring } from './hooks/useMonitoring';
 import { Dashboard } from './pages/Dashboard';
@@ -56,7 +56,8 @@ export default function App() {
   const {
     currentData, history, alerts, logs, deviceStatus, predictions,
     pumpState, pumpMode, isMonitoring,
-    acknowledgeAlert, clearAlerts, sendCommand, toggleMode, toggleMonitoring,
+    pumpRuntime, systemUptime, lastFaultTimestamp,
+    acknowledgeAlert, clearAlerts, sendCommand, toggleMode, toggleMonitoring, injectData
   } = useMonitoring();
 
   const unackedFaults = alerts.filter(a => !a.acknowledged && a.type === 'fault').length;
@@ -152,6 +153,10 @@ export default function App() {
               {deviceStatus.esp32 === 'online' ? <Wifi size={11} className="text-emerald-400" /> : <WifiOff size={11} className="text-red-400" />}
               <span className="text-[9px] font-mono text-[#4a5568]">{deviceStatus.plcBrand}</span>
             </div>
+            <div className="flex items-center gap-1.5">
+              <Database size={11} className={deviceStatus.database === 'online' ? "text-orange-400" : "text-red-400"} />
+              <span className="text-[9px] font-mono text-[#4a5568]">MySQL</span>
+            </div>
             <div className={`flex items-center gap-1.5 px-2 py-1 rounded border text-[9px] font-mono font-bold ${
               currentData.status === 'healthy' ? 'border-emerald-500/30 text-emerald-400 bg-emerald-500/10' :
               currentData.status === 'warning' ? 'border-amber-500/30 text-amber-400 bg-amber-500/10' :
@@ -180,8 +185,12 @@ export default function App() {
                 <Dashboard
                   currentData={currentData} history={history} deviceStatus={deviceStatus}
                   alerts={alerts} pumpState={pumpState} pumpMode={pumpMode}
+                  pumpRuntime={pumpRuntime} systemUptime={systemUptime} lastFaultTimestamp={lastFaultTimestamp}
+                  predictions={predictions}
                   onCommand={sendCommand} onToggleMode={toggleMode}
                   onAcknowledgeAlert={acknowledgeAlert} onClearAlerts={clearAlerts}
+                  onInjectData={injectData}
+                  onNavigate={setPage}
                 />
               )}
               {page === 'analytics' && <Analytics history={history} currentData={currentData} />}

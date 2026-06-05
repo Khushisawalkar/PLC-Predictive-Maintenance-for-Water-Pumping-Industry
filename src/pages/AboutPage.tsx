@@ -25,7 +25,7 @@ export function AboutPage() {
              <div className="p-3 bg-cyan-500/10 rounded-full text-cyan-400"><Cpu size={24} /></div>
              <div>
                <div className="font-mono font-bold text-sm text-[#c0d0e0]">Industrial Sensors & ESP32</div>
-               <div className="font-mono text-xs text-[#4a6070]">Temperature, Vibration, Current, Oil</div>
+               <div className="font-mono text-xs text-[#4a6070]">Temperature, Current, Speed</div>
              </div>
              <div className="absolute top-2 right-2 flex gap-1">
                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -50,9 +50,9 @@ export function AboutPage() {
                <div className="p-2 bg-purple-500/10 rounded-full text-purple-400"><Server size={20} /></div>
                <div className="font-mono font-bold text-xs text-[#c0d0e0] text-center">Node.js + Express<br/><span className="text-[10px] text-[#4a6070]">Backend API</span></div>
              </div>
-             <div className="flex-1 bg-[#0a1118] border border-green-500/30 rounded-lg p-4 flex flex-col items-center gap-2 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
-               <div className="p-2 bg-green-500/10 rounded-full text-green-400"><Database size={20} /></div>
-               <div className="font-mono font-bold text-xs text-[#c0d0e0] text-center">MongoDB<br/><span className="text-[10px] text-[#4a6070]">Data Storage</span></div>
+             <div className="flex-1 bg-[#0a1118] border border-orange-500/30 rounded-lg p-4 flex flex-col items-center gap-2 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
+               <div className="p-2 bg-orange-500/10 rounded-full text-orange-400"><Database size={20} /></div>
+               <div className="font-mono font-bold text-xs text-[#c0d0e0] text-center">MySQL Server<br/><span className="text-[10px] text-[#4a6070]">Database</span></div>
              </div>
           </div>
 
@@ -68,6 +68,51 @@ export function AboutPage() {
           </div>
 
         </div>
+
+        {/* Hardware Bill of Materials */}
+        <div className="w-full max-w-md mt-8">
+          <div className="flex items-center gap-2 mb-4 border-b border-[#1e2d3d] pb-2">
+            <Cpu size={16} className="text-[#4a6070]" />
+            <h3 className="text-sm font-mono font-bold text-[#c0d0e0]">HARDWARE IMPLEMENTATION (BOM)</h3>
+          </div>
+          <div className="bg-[#0a1118] border border-[#1e2d3d] rounded-lg overflow-hidden">
+            <table className="w-full text-xs font-mono text-left">
+              <thead className="bg-[#0d1520] border-b border-[#1e2d3d] text-[#8a9aaa]">
+                <tr>
+                  <th className="p-3 font-normal">Component</th>
+                  <th className="p-3 font-normal text-right">Qty</th>
+                </tr>
+              </thead>
+              <tbody className="text-[#c0d0e0] divide-y divide-[#1e2d3d]">
+                <tr className="hover:bg-[#0d1520]/50">
+                  <td className="p-3">MAX6675 K TYPE</td>
+                  <td className="p-3 text-right">1</td>
+                </tr>
+                <tr className="hover:bg-[#0d1520]/50">
+                  <td className="p-3">PT100 RTD</td>
+                  <td className="p-3 text-right">1</td>
+                </tr>
+                <tr className="hover:bg-[#0d1520]/50">
+                  <td className="p-3">SCT-031-030</td>
+                  <td className="p-3 text-right">2</td>
+                </tr>
+                <tr className="hover:bg-[#0d1520]/50">
+                  <td className="p-3">M12 PNP NO Inductive</td>
+                  <td className="p-3 text-right">2</td>
+                </tr>
+                <tr className="hover:bg-[#0d1520]/50">
+                  <td className="p-3">DB18B20</td>
+                  <td className="p-3 text-right">1</td>
+                </tr>
+                <tr className="hover:bg-[#0d1520]/50">
+                  <td className="p-3">Power 12V</td>
+                  <td className="p-3 text-right">1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
   );

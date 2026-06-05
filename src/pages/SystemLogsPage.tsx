@@ -1,12 +1,34 @@
 import type { SystemLog } from '../types';
-import { Terminal } from 'lucide-react';
+import { Terminal, Download } from 'lucide-react';
 
 export function SystemLogsPage({ logs }: { logs: SystemLog[] }) {
+  const exportToCSV = () => {
+    const headers = ['Timestamp', 'Level', 'Event', 'User'];
+    const csvContent = [
+      headers.join(','),
+      ...logs.map(log => `"${log.timestamp}","${log.level}","${log.event.replace(/"/g, '""')}","${log.user || 'SYSTEM'}"`)
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `system_logs_${new Date().getTime()}.csv`;
+    link.click();
+  };
+
   return (
     <div className="bg-[#070d13] border border-[#1e2d3d] rounded h-full flex flex-col overflow-hidden font-mono text-sm">
-      <div className="p-3 border-b border-[#1e2d3d] flex items-center gap-3 bg-[#0a1118]">
-        <Terminal size={16} className="text-[#4a6070]" />
-        <span className="text-[#8a9aaa] text-xs">SYSTEM_EVENT_LOGGER.EXE</span>
+      <div className="p-3 border-b border-[#1e2d3d] flex items-center justify-between bg-[#0a1118]">
+        <div className="flex items-center gap-3">
+          <Terminal size={16} className="text-[#4a6070]" />
+          <span className="text-[#8a9aaa] text-xs">SYSTEM_EVENT_LOGGER.EXE</span>
+        </div>
+        <button 
+          onClick={exportToCSV}
+          className="flex items-center gap-2 px-3 py-1 bg-[#0d1520] border border-[#1e2d3d] text-[#8a9aaa] rounded text-[10px] hover:text-[#c0d0e0] hover:bg-[#1a2636] transition-all"
+        >
+          <Download size={12} /> EXPORT CSV
+        </button>
       </div>
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-1" style={{ scrollbarWidth: 'thin', scrollbarColor: '#1e2d3d transparent' }}>
         {logs.map((log) => (

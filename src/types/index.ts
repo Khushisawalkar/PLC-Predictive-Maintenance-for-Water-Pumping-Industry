@@ -2,8 +2,10 @@ export type SystemStatus = 'healthy' | 'warning' | 'fault';
 
 export interface SensorData {
   timestamp: string;
-  temperature: number; // °C
-  vibration: number; // mm/s
+  tempWinding: number; // °C (MAX6675)
+  tempBearing: number; // °C (PT100)
+  tempAmbient: number; // °C (DB18B20)
+  current: number; // Amps
   speed: number; // RPM
   healthIndex: number; // 0.0 to 1.0
   status: SystemStatus;
@@ -15,7 +17,7 @@ export interface Alert {
   type: 'warning' | 'fault';
   message: string;
   acknowledged: boolean;
-  source: 'temperature' | 'vibration' | 'speed' | 'system';
+  source: 'tempWinding' | 'tempBearing' | 'tempAmbient' | 'current' | 'speed' | 'system';
 }
 
 export interface SystemLog {
