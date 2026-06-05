@@ -18,8 +18,8 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
   };
 
   return (
-    <div className="flex flex-col gap-4 h-full">
-      <div className="grid grid-cols-3 gap-4 shrink-0">
+    <div className="flex flex-col gap-4 min-h-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 shrink-0">
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
           <div className="text-xs font-mono text-[#4a6070] mb-2">WINDING TEMP (°C)</div>
           <div className="flex-1 min-h-0">
@@ -129,7 +129,7 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
             <Download size={12} /> EXPORT CSV
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto p-0" style={{ scrollbarWidth: 'thin', scrollbarColor: '#1e2d3d transparent' }}>
+        <div className="flex-1 overflow-auto p-0" style={{ scrollbarWidth: 'thin', scrollbarColor: '#1e2d3d transparent' }}>
           <table className="w-full text-left font-mono text-xs">
             <thead className="bg-[#0d1520] text-[#4a6070] sticky top-0 border-b border-[#1e2d3d]">
               <tr>

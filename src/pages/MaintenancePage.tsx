@@ -6,7 +6,7 @@ export function MaintenancePage({ predictions, currentData }: { predictions: Pre
 
   return (
     <div className="flex flex-col gap-4 h-full">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col gap-2">
           <div className="text-xs font-mono text-[#4a6070] flex justify-between items-center">
             SYSTEM HEALTH PROBABILITY
@@ -20,7 +20,7 @@ export function MaintenancePage({ predictions, currentData }: { predictions: Pre
           </div>
         </div>
 
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col gap-2 col-span-2">
+        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col gap-2 md:col-span-2">
           <div className="text-xs font-mono text-[#4a6070] flex items-center gap-2">
             <Cpu size={14} /> AI DIAGNOSTIC SUMMARY
           </div>
@@ -42,13 +42,13 @@ export function MaintenancePage({ predictions, currentData }: { predictions: Pre
         </div>
         <div className="p-4 flex flex-col gap-3 overflow-y-auto">
           {predictions.map((pred, i) => (
-            <div key={i} className="border border-[#1e2d3d] bg-[#0a1118] rounded p-4 flex items-center gap-6">
-              <div className="flex-1">
+            <div key={i} className="border border-[#1e2d3d] bg-[#0a1118] rounded p-4 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
+              <div className="flex-1 w-full">
                 <div className="text-sm font-mono font-bold text-[#c0d0e0] mb-1">{pred.component.toUpperCase()}</div>
                 <div className="text-xs font-mono text-[#8a9aaa]">{pred.recommendation}</div>
               </div>
               
-              <div className="flex flex-col items-end w-48">
+              <div className="flex flex-col items-start md:items-end w-full md:w-48">
                 <div className="text-[10px] font-mono text-[#4a6070] mb-1">FAILURE PROBABILITY</div>
                 <div className="w-full bg-[#1e2d3d] rounded-full h-2 mb-1">
                   <div 
@@ -59,7 +59,7 @@ export function MaintenancePage({ predictions, currentData }: { predictions: Pre
                 <div className="text-xs font-mono text-[#c0d0e0]">{(pred.probabilityOfFailure * 100).toFixed(1)}%</div>
               </div>
 
-              <div className="flex flex-col items-end w-32 border-l border-[#1e2d3d] pl-6">
+              <div className="flex flex-col items-start md:items-end w-full md:w-32 border-t md:border-t-0 md:border-l border-[#1e2d3d] pt-3 md:pt-0 md:pl-6">
                 <div className="text-[10px] font-mono text-[#4a6070] mb-1">EST. LIFESPAN</div>
                 <div className={`text-xl font-mono ${pred.estimatedDaysRemaining < 60 ? 'text-amber-400' : 'text-emerald-400'}`}>
                   {pred.estimatedDaysRemaining}

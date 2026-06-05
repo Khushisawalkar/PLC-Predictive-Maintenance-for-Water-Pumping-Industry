@@ -8,7 +8,7 @@ export function SettingsPage() {
         <h2 className="text-lg font-mono font-bold text-[#c0d0e0]">SYSTEM CONFIGURATION</h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Network Config */}
         <div className="border border-[#1e2d3d] rounded p-4 bg-[#0a1118]">
           <div className="flex items-center gap-2 text-sm font-mono text-[#8a9aaa] mb-4">
@@ -65,11 +65,11 @@ export function SettingsPage() {
         </div>
 
         {/* Threshold Config */}
-        <div className="border border-[#1e2d3d] rounded p-4 bg-[#0a1118] col-span-2">
+        <div className="border border-[#1e2d3d] rounded p-4 bg-[#0a1118] md:col-span-2">
           <div className="flex items-center gap-2 text-sm font-mono text-[#8a9aaa] mb-4">
             <Shield size={16} /> ALARM THRESHOLDS
           </div>
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex flex-col gap-3">
                <div className="flex justify-between items-center border-b border-[#1e2d3d] pb-2">
                 <span className="text-xs font-mono text-[#c0d0e0]">Winding Temp (°C)</span>

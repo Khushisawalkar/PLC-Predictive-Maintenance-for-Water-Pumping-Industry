@@ -51,7 +51,16 @@ function Clock() {
 
 export default function App() {
   const [page, setPage] = useState<Page>('dashboard');
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) setCollapsed(true);
+      else setCollapsed(false);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const {
     currentData, history, alerts, logs, deviceStatus, predictions,
@@ -137,27 +146,27 @@ export default function App() {
             )}
             <div>
               <div className="text-xs font-mono text-[#c0d0e0]">{pageTitles[page]}</div>
-              <div className="text-[9px] font-mono text-[#3a4a5a]">Water Pumping Industry — PLC Predictive Maintenance</div>
+              <div className="text-[9px] font-mono text-[#3a4a5a] hidden sm:block">Water Pumping Industry — PLC Predictive Maintenance</div>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={toggleMonitoring}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded border text-[9px] font-mono font-bold tracking-wide transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded border text-[9px] font-mono font-bold tracking-wide transition-all cursor-pointer shrink-0 ${
                 isMonitoring ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-[#0d1117] border-[#1e2d3d] text-[#4a5568]'
               }`}
             >
               {isMonitoring ? <><Play size={9} /> LIVE</> : <><Pause size={9} /> PAUSED</>}
             </button>
-            <div className="flex items-center gap-1.5">
+            <div className="hidden md:flex items-center gap-1.5 shrink-0">
               {deviceStatus.esp32 === 'online' ? <Wifi size={11} className="text-emerald-400" /> : <WifiOff size={11} className="text-red-400" />}
               <span className="text-[9px] font-mono text-[#4a5568]">{deviceStatus.plcBrand}</span>
             </div>
-            <div className="flex items-center gap-1.5">
+            <div className="hidden md:flex items-center gap-1.5 shrink-0">
               <Database size={11} className={deviceStatus.database === 'online' ? "text-orange-400" : "text-red-400"} />
               <span className="text-[9px] font-mono text-[#4a5568]">MySQL</span>
             </div>
-            <div className={`flex items-center gap-1.5 px-2 py-1 rounded border text-[9px] font-mono font-bold ${
+            <div className={`flex items-center gap-1.5 px-2 py-1 rounded border text-[9px] font-mono font-bold shrink-0 ${
               currentData.status === 'healthy' ? 'border-emerald-500/30 text-emerald-400 bg-emerald-500/10' :
               currentData.status === 'warning' ? 'border-amber-500/30 text-amber-400 bg-amber-500/10' :
               'border-red-500/40 text-red-400 bg-red-500/10'
@@ -167,7 +176,7 @@ export default function App() {
               }`} />
               {currentData.status.toUpperCase()}
             </div>
-            <Clock />
+            <div className="hidden sm:block shrink-0"><Clock /></div>
           </div>
         </header>
 
@@ -203,15 +212,15 @@ export default function App() {
           </AnimatePresence>
         </main>
 
-        <footer className="h-6 bg-[#040810] border-t border-[#1e2d3d] flex items-center px-4 gap-4 shrink-0">
-          <span className="text-[8px] font-mono text-[#2a3a4a]">PLC-PREDICTIVE-MAINTENANCE v1.0.0</span>
-          <span className="text-[8px] font-mono text-[#2a3a4a]">|</span>
-          <span className="text-[8px] font-mono text-[#2a3a4a]">SIMULATION MODE</span>
-          <span className="text-[8px] font-mono text-[#2a3a4a]">|</span>
+        <footer className="h-6 bg-[#040810] border-t border-[#1e2d3d] flex items-center px-4 gap-2 sm:gap-4 shrink-0 overflow-x-auto whitespace-nowrap scrollbar-none">
+          <span className="text-[8px] font-mono text-[#2a3a4a] hidden sm:inline">PLC-PREDICTIVE-MAINTENANCE v1.0.0</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a] hidden sm:inline">|</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a] hidden md:inline">SIMULATION MODE</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a] hidden md:inline">|</span>
           <span className="text-[8px] font-mono text-[#2a3a4a]">Protocol: {deviceStatus.protocol}</span>
           <span className="text-[8px] font-mono text-[#2a3a4a]">|</span>
-          <span className="text-[8px] font-mono text-[#2a3a4a]">Samples: {history.length}</span>
-          <span className="text-[8px] font-mono text-[#2a3a4a]">|</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a] hidden sm:inline">Samples: {history.length}</span>
+          <span className="text-[8px] font-mono text-[#2a3a4a] hidden sm:inline">|</span>
           <span className={`text-[8px] font-mono ${currentData.status === 'healthy' ? 'text-emerald-700' : currentData.status === 'warning' ? 'text-amber-700' : 'text-red-700'}`}>
             HI: {currentData.healthIndex.toFixed(3)}
           </span>

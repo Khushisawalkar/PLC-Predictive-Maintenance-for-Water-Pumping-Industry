@@ -72,9 +72,9 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
   };
 
   return (
-    <div className="grid grid-cols-12 gap-4">
+    <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4">
       {/* Top Stats */}
-      <div className="col-span-12 grid grid-cols-3 gap-4">
+      <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <StatCard 
           title="MOTOR CURRENT" value={currentData.current.toFixed(1)} unit="A" 
           status={getStatus(currentData.current, 18, 22)} icon={Activity} 
@@ -107,7 +107,7 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
       </div>
 
       {/* Main Center Area */}
-      <div className="col-span-8 flex flex-col gap-4">
+      <div className="col-span-12 lg:col-span-8 flex flex-col gap-4">
         {/* Real-time Trend Chart */}
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 h-80">
           <div className="text-xs font-mono text-[#4a6070] mb-4">REAL-TIME SENSOR TRENDS</div>
@@ -128,7 +128,7 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
       </div>
 
       {/* Right Sidebar Controls */}
-      <div className="col-span-4 flex flex-col gap-4">
+      <div className="col-span-12 lg:col-span-4 flex flex-col gap-4">
         {/* Health Index Gauge */}
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col items-center justify-center relative overflow-hidden h-48">
           <div className="text-xs font-mono text-[#4a6070] absolute top-4 left-4">HEALTH INDEX</div>
@@ -216,7 +216,7 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
             </span>
           </div>
           
-          <div className="grid grid-cols-2 gap-2 mb-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
             <button 
               disabled={pumpMode === 'auto' || pumpState === 'running'}
               onClick={() => onCommand('start')}
@@ -233,7 +233,7 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
             </button>
           </div>
           
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
              <button 
               onClick={() => onCommand('emergency_stop')}
               className="flex items-center justify-center gap-2 bg-red-500/20 border border-red-500/60 text-red-400 p-4 rounded hover:bg-red-500/30 transition-all font-mono text-sm font-bold col-span-2 shadow-[0_0_15px_rgba(239,68,68,0.2)] hover:shadow-[0_0_25px_rgba(239,68,68,0.4)] animate-pulse hover:animate-none"
@@ -252,7 +252,7 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
         {/* Manual Data Injection */}
         <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col gap-3">
           <div className="text-xs font-mono text-[#4a6070]">MANUAL DATA INJECTION</div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div>
               <label className="text-[9px] font-mono text-[#4a6070] block mb-1">WINDING (°C)</label>
               <input type="number" value={manualTempWinding} onChange={e => setManualTempWinding(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-1.5 rounded text-xs font-mono outline-none focus:border-cyan-500/50" />
