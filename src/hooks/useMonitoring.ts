@@ -79,6 +79,14 @@ export function useMonitoring() {
         setPumpRuntime(prev => prev + 1);
       }
     }, 1000);
+    
+    // Fetch initial history
+    apiService.getHistory().then(initialHistory => {
+      if (initialHistory && initialHistory.length > 0) {
+        setHistory(initialHistory);
+      }
+    }).catch(console.error);
+    
     return () => clearInterval(interval);
   }, [isMonitoring, pumpState]);
 

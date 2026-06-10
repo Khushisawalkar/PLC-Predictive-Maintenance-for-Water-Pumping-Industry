@@ -157,7 +157,32 @@ export const apiService = {
   },
 
   getHistory: async (_limit: number = 100): Promise<SensorData[]> => {
-    return Promise.resolve([]);
+    try {
+      const apiUrl = getApiUrl();
+      const response = await fetch(`${apiUrl}/api/history`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      
+      // Map the backend data format to our SensorData frontend format
+      if (Array.isArray(data)) {
+        return data.map(item => ({
+          timestamp: item.createdAt,
+          tempWinding: item.temperature !== undefined ? item.temperature : 25.0,
+          speed: item.speed !== undefined ? item.speed : 0,
+          tempAmbient: item.vibration !== undefined ? item.vibration : 25.0,
+          tempBearing: 25.0, // Defaults for unmonitored sensors
+          current: 0.0,
+          healthIndex: 0.5,
+          status: 'healthy'
+        }));
+      }
+      return [];
+    } catch (error) {
+      console.warn("Backend history unavailable");
+      return [];
+    }
   },
 
   postData: async (_data: SensorData): Promise<void> => {

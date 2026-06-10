@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const fs = require("fs");
 
 const Temperature = require("./models/Temperature");
 
@@ -13,6 +14,22 @@ app.use(cors());
 app.use(express.json());
 
 let latestData = { temperature: 25.0, speed: 0, vibration: 0, createdAt: new Date() };
+
+let inMemoryHistory = [];
+const HISTORY_FILE = "./history.json";
+
+// Try to load history from disk if MongoDB is offline and the server restarted
+if (fs.existsSync(HISTORY_FILE)) {
+  try {
+    const rawData = fs.readFileSync(HISTORY_FILE);
+    inMemoryHistory = JSON.parse(rawData);
+    if (inMemoryHistory.length > 0) {
+      latestData = inMemoryHistory[inMemoryHistory.length - 1];
+    }
+  } catch (err) {
+    console.error("Error reading history file:", err);
+  }
+}
 
 app.post("/api/temperature", async (req, res) => {
 
@@ -30,6 +47,14 @@ app.post("/api/temperature", async (req, res) => {
     const newData = new Temperature({
       temperature,
       speed
+    });
+
+    inMemoryHistory.push({ ...latestData });
+    if (inMemoryHistory.length > 100) inMemoryHistory.shift();
+    
+    // Save to local file as a backup in case MongoDB is down
+    fs.writeFile(HISTORY_FILE, JSON.stringify(inMemoryHistory), (err) => {
+      if (err) console.error("Error writing to history file:", err);
     });
 
     // Try to save to DB, but don't fail if DB is unavailable
@@ -59,6 +84,18 @@ app.get("/api/latest", async (req, res) => {
     res.json(data || latestData);
   } catch (error) {
     res.json(latestData);
+  }
+});
+
+app.get("/api/history", async (req, res) => {
+  try {
+    const data = await Temperature.find().sort({ createdAt: -1 }).limit(100);
+    if (data && data.length > 0) {
+      return res.json(data.reverse());
+    }
+    res.json(inMemoryHistory);
+  } catch (error) {
+    res.json(inMemoryHistory);
   }
 });
 
