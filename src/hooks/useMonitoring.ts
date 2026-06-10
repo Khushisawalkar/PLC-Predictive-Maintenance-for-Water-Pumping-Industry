@@ -118,10 +118,16 @@ export function useMonitoring() {
 
         // Drastic Change (Spike) Detection
         const prevData = lastDataRef.current;
-        if (newData.tempWinding - prevData.tempWinding > 10) addAlert('fault', 'EMERGENCY STOP: Drastic Winding Temp Spike', 'tempWinding');
-        if (newData.tempBearing - prevData.tempBearing > 8) addAlert('fault', 'EMERGENCY STOP: Drastic Bearing Temp Spike', 'tempBearing');
-        if (newData.current - prevData.current > 5) addAlert('fault', 'EMERGENCY STOP: Drastic Current Spike', 'current');
-        if (newData.speed - prevData.speed > 500) addAlert('fault', 'EMERGENCY STOP: Drastic Speed Spike', 'speed');
+        let emergencyTriggered = false;
+        if (newData.tempWinding - prevData.tempWinding > 10) { addAlert('fault', 'Emergency Stop: Drastic Winding Temp Spike', 'tempWinding'); emergencyTriggered = true; }
+        if (newData.tempBearing - prevData.tempBearing > 8) { addAlert('fault', 'Emergency Stop: Drastic Bearing Temp Spike', 'tempBearing'); emergencyTriggered = true; }
+        if (newData.current - prevData.current > 5) { addAlert('fault', 'Emergency Stop: Drastic Current Spike', 'current'); emergencyTriggered = true; }
+        if (newData.speed - prevData.speed > 500) { addAlert('fault', 'Emergency Stop: Drastic Speed Spike', 'speed'); emergencyTriggered = true; }
+
+        if (emergencyTriggered && pumpState === 'running') {
+          apiService.sendCommand('emergency_stop').catch(console.error);
+          setPumpState('error');
+        }
 
         lastDataRef.current = newData;
 
@@ -172,8 +178,8 @@ export function useMonitoring() {
       } else if (cmd === 'stop') {
         addLog('Pump Stop Command Sent', 'info', 'Operator');
       } else if (cmd === 'emergency_stop') {
-        addAlert('fault', 'EMERGENCY STOP INITIALIZED', 'system');
-        addLog('EMERGENCY STOP ACTIVATED', 'error', 'Operator');
+        addAlert('fault', 'Emergency Stop Initialized', 'system');
+        addLog('Emergency Stop Activated', 'error', 'Operator');
       } else if (cmd === 'reset') {
         setAlerts([]);
         addLog('System Reset: Data and Alerts cleared (Logs retained)', 'info', 'Operator');
@@ -220,10 +226,16 @@ export function useMonitoring() {
     }
 
     const prevData = lastDataRef.current;
-    if (tempWinding - prevData.tempWinding > 10) { addAlert('fault', 'EMERGENCY STOP: Drastic Winding Temp Spike', 'tempWinding'); status = 'fault'; }
-    if (tempBearing - prevData.tempBearing > 8) { addAlert('fault', 'EMERGENCY STOP: Drastic Bearing Temp Spike', 'tempBearing'); status = 'fault'; }
-    if (current - prevData.current > 5) { addAlert('fault', 'EMERGENCY STOP: Drastic Current Spike', 'current'); status = 'fault'; }
-    if (speed - prevData.speed > 500) { addAlert('fault', 'EMERGENCY STOP: Drastic Speed Spike', 'speed'); status = 'fault'; }
+    let manualEmergencyTriggered = false;
+    if (tempWinding - prevData.tempWinding > 10) { addAlert('fault', 'Emergency Stop: Drastic Winding Temp Spike', 'tempWinding'); status = 'fault'; manualEmergencyTriggered = true; }
+    if (tempBearing - prevData.tempBearing > 8) { addAlert('fault', 'Emergency Stop: Drastic Bearing Temp Spike', 'tempBearing'); status = 'fault'; manualEmergencyTriggered = true; }
+    if (current - prevData.current > 5) { addAlert('fault', 'Emergency Stop: Drastic Current Spike', 'current'); status = 'fault'; manualEmergencyTriggered = true; }
+    if (speed - prevData.speed > 500) { addAlert('fault', 'Emergency Stop: Drastic Speed Spike', 'speed'); status = 'fault'; manualEmergencyTriggered = true; }
+
+    if (manualEmergencyTriggered && pumpState === 'running') {
+      apiService.sendCommand('emergency_stop').catch(console.error);
+      setPumpState('error');
+    }
 
     if (tempWinding > 80 || tempBearing > 70 || current > 22 || speed > 2800) {
       status = 'fault';

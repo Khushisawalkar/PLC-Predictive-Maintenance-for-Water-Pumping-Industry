@@ -1,17 +1,110 @@
 @import "tailwindcss";
 
 @theme {
-  --color-industrial-bg: #060b12;
-  --color-industrial-card: #070d13;
-  --color-industrial-border: #1e2d3d;
-  --color-industrial-text: #c0d0e0;
-  --color-industrial-muted: #3a4a5a;
-  --color-industrial-cyan: #00bcd4;
+  --color-ind-bg: var(--theme-bg);
+  --color-ind-card: var(--theme-card);
+  --color-ind-card-hover: var(--theme-card-hover);
+  --color-ind-card-active: var(--theme-card-active);
+  --color-ind-border: var(--theme-border);
+  --color-ind-text: var(--theme-text);
+  --color-ind-text-muted: var(--theme-text-muted);
+  --color-ind-text-dim: var(--theme-text-dim);
+}
+
+:root {
+  --theme-bg: #060b12;
+  --theme-card: #070d13;
+  --theme-card-hover: #0a1118;
+  --theme-card-active: #0d1520;
+  --theme-border: #1e2d3d;
+  --theme-text: #c0d0e0;
+  --theme-text-muted: #8a9aaa;
+  --theme-text-dim: #4a6070;
+}
+
+body.light-mode {
+  --theme-bg: #f0f2f5;
+  --theme-card: #ffffff;
+  --theme-card-hover: #f8fafc;
+  --theme-card-active: #f1f5f9;
+  --theme-border: #cbd5e1;
+  --theme-text: #1e293b;
+  --theme-text-muted: #475569;
+  --theme-text-dim: #64748b;
 }
 
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  background-color: var(--color-industrial-bg);
-  color: var(--color-industrial-text);
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* From Uiverse.io by Madflows */ 
+.toggle-switch {
+  position: relative;
+  width: 60px; /* scaled down from 100px to fit header */
+  height: 30px; /* scaled down from 50px */
+  --light: #d8dbe0;
+  --dark: #28292c;
+  --link: rgb(27, 129, 112);
+  --link-hover: rgb(24, 94, 82);
+}
+
+.switch-label {
+  position: absolute;
+  width: 100%;
+  height: 30px;
+  background-color: var(--dark);
+  border-radius: 15px;
+  cursor: pointer;
+  border: 2px solid var(--dark);
+  transition: 0.3s;
+}
+
+body.light-mode .switch-label {
+  border-color: var(--light);
+}
+
+.checkbox {
+  position: absolute;
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.checkbox:checked ~ .slider {
+  background-color: var(--light);
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  -webkit-box-shadow: inset 8px -3px 0px 0px var(--light);
+  box-shadow: inset 8px -3px 0px 0px var(--light);
+  background-color: var(--dark);
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.checkbox:checked ~ .slider::before {
+  -webkit-transform: translateX(30px);
+  -ms-transform: translateX(30px);
+  transform: translateX(30px);
+  background-color: var(--dark);
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }

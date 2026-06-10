@@ -20,8 +20,8 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
   return (
     <div className="flex flex-col gap-4 min-h-full">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 shrink-0">
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-[10px] md:text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2">WINDING TEMP (°C)</div>
+        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col h-48">
+          <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2">Winding Temp (°C)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
@@ -35,8 +35,8 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
           </div>
         </div>
 
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-[10px] md:text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2">BEARING TEMP (°C)</div>
+        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col h-48">
+          <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2">Bearing Temp (°C)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
@@ -50,8 +50,8 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
           </div>
         </div>
 
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-[10px] md:text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2">AMBIENT TEMP (°C)</div>
+        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col h-48">
+          <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2">Ambient Temp (°C)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
@@ -65,8 +65,8 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
           </div>
         </div>
 
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-[10px] md:text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2">MOTOR CURRENT (A)</div>
+        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col h-48">
+          <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2">Motor Current (A)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
@@ -80,8 +80,8 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
           </div>
         </div>
 
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-[10px] md:text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2">PUMP SPEED (RPM)</div>
+        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col h-48">
+          <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2">Pump Speed (RPM)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
@@ -95,9 +95,9 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
           </div>
         </div>
 
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col h-48">
-          <div className="text-[10px] md:text-sm font-semibold text-[#8a9aaa] tracking-wide mb-2 flex justify-between">
-            <span>HEALTH INDEX</span>
+        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col h-48">
+          <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2 flex justify-between">
+            <span>Health Index</span>
             <span className={`font-bold ${currentData.status === 'healthy' ? 'text-emerald-400' : currentData.status === 'warning' ? 'text-amber-400' : 'text-red-400'}`}>
               {(currentData.healthIndex * 100).toFixed(1)}%
             </span>
@@ -116,37 +116,37 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
         </div>
       </div>
       
-      <div className="bg-[#070d13] border border-[#1e2d3d] rounded flex flex-col flex-1 min-h-0">
-        <div className="p-3 border-b border-[#1e2d3d] flex items-center justify-between bg-[#0a1118] shrink-0">
+      <div className="bg-ind-card border border-ind-border rounded flex flex-col flex-1 min-h-0">
+        <div className="p-3 border-b border-ind-border flex items-center justify-between bg-ind-card-hover shrink-0">
           <div className="flex items-center gap-3">
-            <Table className="w-3 h-3 md:w-4 md:h-4 text-[#4a6070]" />
-            <span className="text-[#8a9aaa] text-[10px] md:text-sm font-semibold tracking-wide">HISTORICAL DATA LOGS</span>
+            <Table className="w-3.5 h-3.5 md:w-4 md:h-4 text-ind-text-dim" />
+            <span className="text-ind-text-muted text-xs md:text-sm font-semibold tracking-wide">Historical Data Logs</span>
           </div>
           <button 
             onClick={exportToCSV}
-            className="flex items-center gap-2 px-3 py-1 bg-[#0d1520] border border-[#1e2d3d] text-[#8a9aaa] rounded text-[10px] md:text-xs hover:text-[#c0d0e0] hover:bg-[#1a2636] transition-all font-bold tracking-wide"
+            className="flex items-center gap-2 px-3 py-1 bg-ind-card-active border border-ind-border text-ind-text-muted rounded text-xs md:text-sm hover:text-ind-text hover:bg-ind-card-active transition-all font-bold tracking-wide"
           >
-            <Download className="w-3 h-3 md:w-4 md:h-4" /> EXPORT CSV
+            <Download className="w-3.5 h-3.5 md:w-4 md:h-4" /> Export CSV
           </button>
         </div>
         <div className="flex-1 overflow-auto p-0" style={{ scrollbarWidth: 'thin', scrollbarColor: '#1e2d3d transparent' }}>
-          <table className="w-full text-left font-mono text-[10px] md:text-xs">
-            <thead className="bg-[#0d1520] text-[#4a6070] sticky top-0 border-b border-[#1e2d3d]">
+          <table className="w-full text-left font-mono text-xs md:text-sm">
+            <thead className="bg-ind-card-active text-ind-text-dim sticky top-0 border-b border-ind-border">
               <tr>
-                <th className="p-3 font-normal">TIMESTAMP</th>
-                <th className="p-3 font-normal">WINDING (°C)</th>
-                <th className="p-3 font-normal">BEARING (°C)</th>
-                <th className="p-3 font-normal">AMBIENT (°C)</th>
-                <th className="p-3 font-normal">CURRENT (A)</th>
-                <th className="p-3 font-normal">SPEED (RPM)</th>
-                <th className="p-3 font-normal">HEALTH IDX</th>
-                <th className="p-3 font-normal">STATUS</th>
+                <th className="p-3 font-normal">Timestamp</th>
+                <th className="p-3 font-normal">Winding (°C)</th>
+                <th className="p-3 font-normal">Bearing (°C)</th>
+                <th className="p-3 font-normal">Ambient (°C)</th>
+                <th className="p-3 font-normal">Current (A)</th>
+                <th className="p-3 font-normal">Speed (RPM)</th>
+                <th className="p-3 font-normal">Health Idx</th>
+                <th className="p-3 font-normal">Status</th>
               </tr>
             </thead>
             <tbody>
               {[...history].reverse().map((data, i) => (
-                <tr key={i} className="border-b border-[#1e2d3d]/50 hover:bg-[#0d1520] transition-colors text-[#c0d0e0]">
-                  <td className="p-3 text-[#8a9aaa]">{new Date(data.timestamp).toLocaleTimeString()}</td>
+                <tr key={i} className="border-b border-ind-border/50 hover:bg-ind-card-active transition-colors text-ind-text">
+                  <td className="p-3 text-ind-text-muted">{new Date(data.timestamp).toLocaleTimeString()}</td>
                   <td className="p-3">{data.tempWinding.toFixed(2)}</td>
                   <td className="p-3">{data.tempBearing.toFixed(2)}</td>
                   <td className="p-3">{data.tempAmbient.toFixed(2)}</td>
@@ -154,19 +154,19 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
                   <td className="p-3">{data.speed.toFixed(0)}</td>
                   <td className="p-3">{(data.healthIndex * 100).toFixed(1)}%</td>
                   <td className="p-3">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    <span className={`px-2 py-0.5 rounded text-xs md:text-sm capitalize font-bold ${
                       data.status === 'healthy' ? 'bg-emerald-500/10 text-emerald-400' :
                       data.status === 'warning' ? 'bg-amber-500/10 text-amber-400' :
                       'bg-red-500/10 text-red-400'
                     }`}>
-                      {data.status.toUpperCase()}
+                      {data.status}
                     </span>
                   </td>
                 </tr>
               ))}
               {history.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="p-6 text-center text-[#4a6070] italic">No historical data available.</td>
+                  <td colSpan={6} className="p-6 text-center text-ind-text-dim italic">No historical data available.</td>
                 </tr>
               )}
             </tbody>

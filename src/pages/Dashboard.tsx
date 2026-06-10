@@ -32,14 +32,14 @@ const formatTime = (seconds: number) => {
 const StatCard = ({ title, value, unit, status, icon: Icon, onClick, clickable }: any) => (
   <div 
     onClick={onClick}
-    className={`p-4 rounded border bg-[#070d13] flex flex-col gap-2 relative overflow-hidden ${
+    className={`p-3 md:p-4 rounded border bg-ind-card flex flex-col gap-1.5 md:gap-2 relative overflow-hidden ${
     status === 'healthy' ? 'border-emerald-500/20' : 
     status === 'warning' ? 'border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.1)]' : 
     'border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.2)]'
-  } ${clickable ? 'cursor-pointer hover:bg-[#0d1520] transition-colors group' : ''}`}>
-    <div className="flex justify-between items-center text-[#8a9aaa] text-[10px] md:text-xs font-semibold tracking-wide">
-      <span className={`${clickable ? 'group-hover:text-[#c0d0e0] transition-colors' : ''}`}>{title}</span>
-      <Icon className={`w-3 h-3 md:w-4 md:h-4 ${
+  } ${clickable ? 'cursor-pointer hover:bg-ind-card-active transition-colors group' : ''}`}>
+    <div className="flex justify-between items-center text-ind-text-muted text-xs md:text-sm font-semibold tracking-wide">
+      <span className={`${clickable ? 'group-hover:text-ind-text transition-colors' : ''}`}>{title}</span>
+      <Icon className={`w-3.5 h-3.5 md:w-4 md:h-4 ${
         status === 'healthy' ? 'text-emerald-500' : 
         status === 'warning' ? 'text-amber-500' : 'text-red-500 animate-pulse'
       }`} />
@@ -51,7 +51,7 @@ const StatCard = ({ title, value, unit, status, icon: Icon, onClick, clickable }
       }`}>
         {value}
       </span>
-      <span className="text-[#8a9aaa] text-xs md:text-sm lg:text-base ml-1 font-semibold">{unit}</span>
+      <span className="text-ind-text-muted text-xs md:text-sm ml-1 font-semibold">{unit}</span>
     </div>
   </div>
 );
@@ -74,33 +74,33 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
   return (
     <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4">
       {/* Top Stats */}
-      <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="col-span-12 grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
         <StatCard 
-          title="MOTOR CURRENT" value={currentData.current.toFixed(1)} unit="A" 
+          title="Motor Current" value={currentData.current.toFixed(1)} unit="A" 
           status={getStatus(currentData.current, 18, 22)} icon={Activity} 
           onClick={() => onNavigate?.('analytics')} clickable 
         />
         <StatCard 
-          title="PUMP SPEED" value={currentData.speed.toFixed(0)} unit="RPM" 
+          title="Pump Speed" value={currentData.speed.toFixed(0)} unit="RPM" 
           status={getStatus(currentData.speed, 2500, 2800)} icon={Activity} 
           onClick={() => onNavigate?.('analytics')} clickable 
         />
         <StatCard 
-          title="OVERALL PERF" value={((1 - currentData.healthIndex) * 100).toFixed(1)} unit="%" 
+          title="Overall Perf" value={((1 - currentData.healthIndex) * 100).toFixed(1)} unit="%" 
           status={currentData.healthIndex >= 0.8 ? 'fault' : currentData.healthIndex >= 0.6 ? 'warning' : 'healthy'} icon={Activity} 
         />
         <StatCard 
-          title="WINDING TEMP" value={currentData.tempWinding.toFixed(1)} unit="°C" 
+          title="Winding Temp" value={currentData.tempWinding.toFixed(1)} unit="°C" 
           status={getStatus(currentData.tempWinding, 70, 80)} icon={Activity} 
           onClick={() => onNavigate?.('analytics')} clickable 
         />
         <StatCard 
-          title="BEARING TEMP" value={currentData.tempBearing.toFixed(1)} unit="°C" 
+          title="Bearing Temp" value={currentData.tempBearing.toFixed(1)} unit="°C" 
           status={getStatus(currentData.tempBearing, 60, 70)} icon={Activity} 
           onClick={() => onNavigate?.('analytics')} clickable 
         />
         <StatCard 
-          title="AMBIENT TEMP" value={currentData.tempAmbient.toFixed(1)} unit="°C" 
+          title="Ambient Temp" value={currentData.tempAmbient.toFixed(1)} unit="°C" 
           status={getStatus(currentData.tempAmbient, 40, 50)} icon={Activity} 
           onClick={() => onNavigate?.('analytics')} clickable 
         />
@@ -109,8 +109,8 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
       {/* Main Center Area */}
       <div className="col-span-12 lg:col-span-8 flex flex-col gap-4">
         {/* Real-time Trend Chart */}
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 h-80">
-          <div className="text-sm md:text-base font-semibold text-[#8a9aaa] mb-4">REAL-TIME SENSOR TRENDS</div>
+        <div className="bg-ind-card border border-ind-border rounded p-4 h-80">
+          <div className="text-sm md:text-base font-semibold text-ind-text-muted mb-4">Real-Time Sensor Trends</div>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={history}>
               <CartesianGrid strokeDasharray="3 3" stroke="#1e2d3d" />
@@ -130,8 +130,8 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
       {/* Right Sidebar Controls */}
       <div className="col-span-12 lg:col-span-4 flex flex-col gap-4">
         {/* Health Index Gauge */}
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col items-center justify-center relative overflow-hidden h-48">
-          <div className="text-sm md:text-base font-semibold text-[#8a9aaa] absolute top-4 left-4">HEALTH INDEX</div>
+        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col items-center justify-center relative overflow-hidden h-48">
+          <div className="text-sm md:text-base font-semibold text-ind-text-muted absolute top-4 left-4">Health Index</div>
           <div className="relative flex items-center justify-center mt-4">
              <svg width="120" height="120" viewBox="0 0 120 120" className="rotate-[-90deg]">
                 <circle cx="60" cy="60" r="50" fill="none" stroke="#1e2d3d" strokeWidth="8" />
@@ -148,46 +148,46 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
                }`}>
                  {(currentData.healthIndex * 100).toFixed(0)}%
                </span>
-               <span className="text-[10px] md:text-xs text-[#8a9aaa] font-semibold uppercase mt-1">{currentData.status}</span>
+               <span className="text-xs md:text-sm text-ind-text-muted font-semibold capitalize mt-1">{currentData.status}</span>
              </div>
           </div>
         </div>
 
         {/* System Status Panel */}
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col gap-3">
-          <div className="text-sm md:text-base font-semibold text-[#8a9aaa] mb-1">SYSTEM DIAGNOSTICS</div>
+        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col gap-3">
+          <div className="text-sm md:text-base font-semibold text-ind-text-muted mb-1">System Diagnostics</div>
           
-          <div className="flex justify-between items-center text-[10px] md:text-xs">
-            <span className="text-[#8a9aaa]">SYSTEM UPTIME:</span>
-            <span className="text-[#c0d0e0] bg-[#0d1520] px-2 py-0.5 rounded font-mono">{formatTime(systemUptime)}</span>
+          <div className="flex justify-between items-center text-xs md:text-sm">
+            <span className="text-ind-text-muted">System Uptime:</span>
+            <span className="text-ind-text bg-ind-card-active px-2 py-0.5 rounded font-mono">{formatTime(systemUptime)}</span>
           </div>
-          <div className="flex justify-between items-center text-[10px] md:text-xs">
-            <span className="text-[#8a9aaa]">PUMP RUNTIME:</span>
-            <span className="text-[#c0d0e0] bg-[#0d1520] px-2 py-0.5 rounded font-mono">{formatTime(pumpRuntime)}</span>
+          <div className="flex justify-between items-center text-xs md:text-sm">
+            <span className="text-ind-text-muted">Pump Runtime:</span>
+            <span className="text-ind-text bg-ind-card-active px-2 py-0.5 rounded font-mono">{formatTime(pumpRuntime)}</span>
           </div>
-          <div className="flex justify-between items-center text-[10px] md:text-xs">
-            <span className="text-[#8a9aaa]">LAST FAULT:</span>
-            <span className={`font-mono ${lastFaultTimestamp ? "text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded" : "text-[#4a6070]"}`}>
-              {lastFaultTimestamp ? new Date(lastFaultTimestamp).toLocaleTimeString() : 'NONE'}
+          <div className="flex justify-between items-center text-xs md:text-sm">
+            <span className="text-ind-text-muted">Last Fault:</span>
+            <span className={`font-mono ${lastFaultTimestamp ? "text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded" : "text-ind-text-dim"}`}>
+              {lastFaultTimestamp ? new Date(lastFaultTimestamp).toLocaleTimeString() : 'None'}
             </span>
           </div>
-          <div className="flex justify-between items-center text-[10px] md:text-xs">
-            <span className="text-[#8a9aaa]">AUTO-SHUTDOWN:</span>
-            <span className={`px-2 py-0.5 rounded font-semibold ${pumpMode === 'auto' ? "text-emerald-400 bg-emerald-500/10" : "text-[#8a9aaa] bg-[#0d1520]"}`}>
-              {pumpMode === 'auto' ? 'ARMED' : 'DISABLED'}
+          <div className="flex justify-between items-center text-xs md:text-sm">
+            <span className="text-ind-text-muted">Auto-Shutdown:</span>
+            <span className={`px-2 py-0.5 rounded font-semibold ${pumpMode === 'auto' ? "text-emerald-400 bg-emerald-500/10" : "text-ind-text-muted bg-ind-card-active"}`}>
+              {pumpMode === 'auto' ? 'Armed' : 'Disabled'}
             </span>
           </div>
         </div>
 
         {/* Component Lifespan Mini Panel */}
         {predictions.length > 0 && (
-          <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col gap-3">
-            <div className="text-sm md:text-base font-semibold text-[#8a9aaa]">CRITICAL LIFESPAN</div>
+          <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col gap-3">
+            <div className="text-sm md:text-base font-semibold text-ind-text-muted">Critical Lifespan</div>
             {predictions.slice().sort((a, b) => a.estimatedDaysRemaining - b.estimatedDaysRemaining).slice(0, 2).map((pred, i) => (
-              <div key={i} className="flex justify-between items-center text-[10px] md:text-xs border-b border-[#1e2d3d] pb-2 last:border-0 last:pb-0">
-                <span className="text-[#c0d0e0] truncate mr-2 font-medium">{pred.component.toUpperCase()}</span>
+              <div key={i} className="flex justify-between items-center text-xs md:text-sm border-b border-ind-border pb-2 last:border-0 last:pb-0">
+                <span className="text-ind-text truncate mr-2 font-medium capitalize">{pred.component}</span>
                 <span className={`px-2 py-0.5 rounded font-bold ${pred.estimatedDaysRemaining < 60 ? 'text-amber-400 bg-amber-500/10' : 'text-emerald-400 bg-emerald-500/10'}`}>
-                  {pred.estimatedDaysRemaining} DAYS
+                  {pred.estimatedDaysRemaining} Days
                 </span>
               </div>
             ))}
@@ -195,24 +195,24 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
         )}
 
         {/* Pump Controls */}
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4">
+        <div className="bg-ind-card border border-ind-border rounded p-4">
           <div className="flex justify-between items-center mb-4">
-            <div className="text-sm md:text-base font-semibold text-[#8a9aaa]">PUMP CONTROL PANEL</div>
-            <button onClick={onToggleMode} className={`px-3 py-1.5 text-[10px] md:text-xs font-bold rounded border transition-colors ${
-              pumpMode === 'auto' ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400' : 'bg-[#1e2d3d] border-[#3a4a5a] text-[#c0d0e0]'
+            <div className="text-sm md:text-base font-semibold text-ind-text-muted">Pump Control Panel</div>
+            <button onClick={onToggleMode} className={`px-3 py-1.5 text-xs md:text-sm font-bold rounded border transition-colors capitalize ${
+              pumpMode === 'auto' ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400' : 'bg-ind-border border-ind-border text-ind-text'
             }`}>
-              {pumpMode.toUpperCase()} MODE
+              {pumpMode} Mode
             </button>
           </div>
 
-          <div className="flex items-center justify-between mb-4 bg-[#0a1118] border border-[#1e2d3d] p-3 rounded">
-            <span className="text-[10px] md:text-xs font-semibold text-[#8a9aaa]">STATUS:</span>
-            <span className={`text-[10px] md:text-xs font-bold px-3 py-1 rounded tracking-wide ${
+          <div className="flex items-center justify-between mb-4 bg-ind-card-hover border border-ind-border p-3 rounded">
+            <span className="text-xs md:text-sm font-semibold text-ind-text-muted">Status:</span>
+            <span className={`text-xs md:text-sm font-bold px-3 py-1 rounded tracking-wide capitalize ${
               pumpState === 'running' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
               pumpState === 'error' ? 'bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse' :
-              'bg-[#1e2d3d] text-[#8a9aaa] border border-[#3a4a5a]'
+              'bg-ind-border text-ind-text-muted border border-ind-border'
             }`}>
-              {pumpState.toUpperCase()}
+              {pumpState}
             </span>
           </div>
           
@@ -220,65 +220,65 @@ export function Dashboard({ currentData, history, pumpState, pumpMode, pumpRunti
             <button 
               disabled={pumpMode === 'auto' || pumpState === 'running'}
               onClick={() => onCommand('start')}
-              className="flex items-center justify-center gap-2 bg-[#0d1520] border border-emerald-500/50 text-emerald-400 p-4 rounded hover:bg-emerald-500/20 disabled:opacity-50 transition-all font-mono text-sm font-bold shadow-[0_0_10px_rgba(16,185,129,0.1)] hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+              className="flex items-center justify-center gap-2 bg-ind-card-active border border-emerald-500/50 text-emerald-400 p-4 rounded hover:bg-emerald-500/20 disabled:opacity-50 transition-all font-mono text-sm md:text-base font-bold shadow-[0_0_10px_rgba(16,185,129,0.1)] hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]"
             >
-              <Power size={18} /> START
+              <Power size={18} /> Start
             </button>
             <button 
               disabled={pumpMode === 'auto' || pumpState === 'stopped'}
               onClick={() => onCommand('stop')}
-              className="flex items-center justify-center gap-2 bg-[#0d1520] border border-amber-500/50 text-amber-400 p-4 rounded hover:bg-amber-500/20 disabled:opacity-50 transition-all font-mono text-sm font-bold shadow-[0_0_10px_rgba(245,158,11,0.1)] hover:shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+              className="flex items-center justify-center gap-2 bg-ind-card-active border border-amber-500/50 text-amber-400 p-4 rounded hover:bg-amber-500/20 disabled:opacity-50 transition-all font-mono text-sm md:text-base font-bold shadow-[0_0_10px_rgba(245,158,11,0.1)] hover:shadow-[0_0_15px_rgba(245,158,11,0.2)]"
             >
-              <Power size={18} /> STOP
+              <Power size={18} /> Stop
             </button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
              <button 
               onClick={() => onCommand('emergency_stop')}
-              className="flex items-center justify-center gap-2 bg-red-500/20 border border-red-500/60 text-red-400 p-4 rounded hover:bg-red-500/30 transition-all font-mono text-sm font-bold col-span-2 shadow-[0_0_15px_rgba(239,68,68,0.2)] hover:shadow-[0_0_25px_rgba(239,68,68,0.4)] animate-pulse hover:animate-none"
+              className="flex items-center justify-center gap-2 bg-red-500/20 border border-red-500/60 text-red-400 p-4 rounded hover:bg-red-500/30 transition-all font-mono text-sm md:text-base font-bold col-span-1 md:col-span-2 shadow-[0_0_15px_rgba(239,68,68,0.2)] hover:shadow-[0_0_25px_rgba(239,68,68,0.4)] animate-pulse hover:animate-none"
             >
-              <AlertTriangle size={18} /> EMERGENCY STOP
+              <AlertTriangle size={18} /> Emergency Stop
             </button>
              <button 
               onClick={() => onCommand('reset')}
-              className="flex items-center justify-center gap-2 bg-[#0d1520] border border-[#3a4a5a] text-[#c0d0e0] p-3 rounded hover:bg-[#1e2d3d] hover:text-white transition-all font-mono text-xs font-bold col-span-2 mt-2"
+              className="flex items-center justify-center gap-2 bg-ind-card-active border border-ind-border text-ind-text p-3 rounded hover:bg-ind-border hover:text-white transition-all font-mono text-xs md:text-sm font-bold col-span-1 md:col-span-2 mt-2"
             >
-              <RefreshCw size={14} /> SYSTEM RESET
+              <RefreshCw size={14} /> System Reset
             </button>
           </div>
         </div>
 
         {/* Manual Data Injection */}
-        <div className="bg-[#070d13] border border-[#1e2d3d] rounded p-4 flex flex-col gap-4">
-          <div className="text-sm md:text-base font-semibold text-[#8a9aaa]">MANUAL DATA INJECTION</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col gap-4">
+          <div className="text-sm md:text-base font-semibold text-ind-text-muted">Manual Data Injection</div>
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[10px] md:text-xs text-[#8a9aaa] block mb-1">WINDING (°C)</label>
-              <input type="number" value={manualTempWinding} onChange={e => setManualTempWinding(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-[10px] md:text-sm font-mono outline-none focus:border-cyan-500/50" />
+              <label className="text-xs md:text-sm text-ind-text-muted block mb-1">Winding (°C)</label>
+              <input type="number" value={manualTempWinding} onChange={e => setManualTempWinding(e.target.value)} className="w-full bg-ind-card-active border border-ind-border text-ind-text p-2 rounded text-xs md:text-sm font-mono outline-none focus:border-cyan-500/50" />
             </div>
             <div>
-              <label className="text-[10px] md:text-xs text-[#8a9aaa] block mb-1">BEARING (°C)</label>
-              <input type="number" value={manualTempBearing} onChange={e => setManualTempBearing(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-[10px] md:text-sm font-mono outline-none focus:border-cyan-500/50" />
+              <label className="text-xs md:text-sm text-ind-text-muted block mb-1">Bearing (°C)</label>
+              <input type="number" value={manualTempBearing} onChange={e => setManualTempBearing(e.target.value)} className="w-full bg-ind-card-active border border-ind-border text-ind-text p-2 rounded text-xs md:text-sm font-mono outline-none focus:border-cyan-500/50" />
             </div>
             <div>
-              <label className="text-[10px] md:text-xs text-[#8a9aaa] block mb-1">AMBIENT (°C)</label>
-              <input type="number" value={manualTempAmbient} onChange={e => setManualTempAmbient(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-[10px] md:text-sm font-mono outline-none focus:border-cyan-500/50" />
+              <label className="text-xs md:text-sm text-ind-text-muted block mb-1">Ambient (°C)</label>
+              <input type="number" value={manualTempAmbient} onChange={e => setManualTempAmbient(e.target.value)} className="w-full bg-ind-card-active border border-ind-border text-ind-text p-2 rounded text-xs md:text-sm font-mono outline-none focus:border-cyan-500/50" />
             </div>
             <div>
-              <label className="text-[10px] md:text-xs text-[#8a9aaa] block mb-1">CURRENT (A)</label>
-              <input type="number" value={manualCurrent} onChange={e => setManualCurrent(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-[10px] md:text-sm font-mono outline-none focus:border-cyan-500/50" />
+              <label className="text-xs md:text-sm text-ind-text-muted block mb-1">Current (A)</label>
+              <input type="number" value={manualCurrent} onChange={e => setManualCurrent(e.target.value)} className="w-full bg-ind-card-active border border-ind-border text-ind-text p-2 rounded text-xs md:text-sm font-mono outline-none focus:border-cyan-500/50" />
             </div>
-            <div className="col-span-1 md:col-span-2">
-              <label className="text-[10px] md:text-xs text-[#8a9aaa] block mb-1">SPEED (RPM)</label>
-              <input type="number" value={manualSpeed} onChange={e => setManualSpeed(e.target.value)} className="w-full bg-[#0d1520] border border-[#1e2d3d] text-[#c0d0e0] p-2 rounded text-[10px] md:text-sm font-mono outline-none focus:border-cyan-500/50" />
+            <div className="col-span-2">
+              <label className="text-xs md:text-sm text-ind-text-muted block mb-1">Speed (RPM)</label>
+              <input type="number" value={manualSpeed} onChange={e => setManualSpeed(e.target.value)} className="w-full bg-ind-card-active border border-ind-border text-ind-text p-2 rounded text-xs md:text-sm font-mono outline-none focus:border-cyan-500/50" />
             </div>
           </div>
           <button 
             onClick={handleInject}
-            className="flex items-center justify-center gap-2 bg-[#0d1520] border border-cyan-500/30 text-cyan-400 p-3 rounded hover:bg-cyan-500/10 transition-all text-[10px] md:text-xs font-bold tracking-wider w-full mt-2"
+            className="flex items-center justify-center gap-2 bg-ind-card-active border border-cyan-500/30 text-cyan-400 p-3 rounded hover:bg-cyan-500/10 transition-all text-xs md:text-sm font-bold tracking-wider w-full mt-2"
           >
-            <Send className="w-3 h-3 md:w-4 md:h-4" /> INJECT & PROCESS
+            <Send className="w-3.5 h-3.5 md:w-4 md:h-4" /> Inject & Process
           </button>
         </div>
       </div>
