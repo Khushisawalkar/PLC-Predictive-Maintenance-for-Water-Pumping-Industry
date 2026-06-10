@@ -90,16 +90,49 @@ setInterval(() => {
   };
 }, 1000);
 
+// Helper to automatically find the backend on the same network
+const getApiUrl = () => {
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+  // If accessed from another device (e.g. 192.168.x.x), assume backend is on the same host
+  if (typeof window !== 'undefined' && window.location.hostname && window.location.hostname !== 'localhost') {
+    // Check if it's GitHub Pages
+    if (window.location.hostname.includes('github.io')) {
+      return "http://localhost:5000"; // Will trigger fallback on GitHub Pages
+    }
+    return `http://${window.location.hostname}:5000`;
+  }
+  return "http://localhost:5000";
+};
+
 export const apiService = {
   getLatestData: async (): Promise<SensorData> => {
     try {
-      const response = await fetch("http://192.168.29.45:5000/api/latest");
+      const apiUrl = getApiUrl();
+      const response = await fetch(`${apiUrl}/api/latest`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return await response.json();
+      const data = await response.json();
+      
+      // If the backend only returns partial data (e.g. from the Temperature model)
+      if (data && data.temperature !== undefined) {
+        mockTempWinding = data.temperature; // Inject real temp into the simulation loop!
+        
+        return {
+          ...currentSensorData,
+          tempWinding: data.temperature,
+          timestamp: data.createdAt || currentSensorData.timestamp
+        };
+      }
+      
+      // If the backend returns a full SensorData object
+      if (data && data.tempWinding !== undefined) {
+        return data;
+      }
+
+      return currentSensorData;
     } catch (error) {
-      console.error("Failed to fetch latest data, falling back to mock data:", error);
+      console.warn("Backend unavailable, using simulated data");
       return currentSensorData;
     }
   },
@@ -114,7 +147,8 @@ export const apiService = {
 
   sendCommand: async (command: string): Promise<void> => {
     try {
-      const response = await fetch("http://192.168.29.45:5000/api/command", {
+      const apiUrl = getApiUrl();
+      const response = await fetch(`${apiUrl}/api/command`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -124,8 +158,20 @@ export const apiService = {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+      // Update local state so UI reflects the command
+      if (command === 'start') mockPumpState = 'running';
+      else if (command === 'stop') mockPumpState = 'stopped';
+      else if (command === 'emergency_stop') mockPumpState = 'error';
+      else if (command === 'reset') {
+        mockPumpState = 'stopped';
+        mockTempWinding = 25.0;
+        mockTempBearing = 25.0;
+        mockTempAmbient = 25.0;
+        mockCurrent = 0.0;
+        mockSpeed = 0;
+      }
     } catch (error) {
-      console.error("Failed to send command to API, falling back to mock behavior:", error);
+      console.warn(`Backend unavailable, simulating command: ${command}`);
       if (command === 'start') mockPumpState = 'running';
       else if (command === 'stop') mockPumpState = 'stopped';
       else if (command === 'emergency_stop') mockPumpState = 'error';
