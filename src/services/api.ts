@@ -93,7 +93,7 @@ setInterval(() => {
 export const apiService = {
   getLatestData: async (): Promise<SensorData> => {
     try {
-      const response = await fetch("http://192.168.29.45:5000/api/latest");
+      const response = await fetch("http://localhost:5000/api/latest");
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -114,7 +114,7 @@ export const apiService = {
 
   sendCommand: async (command: string): Promise<void> => {
     try {
-      const response = await fetch("http://192.168.29.45:5000/api/command", {
+      const response = await fetch("http://localhost:5000/api/command", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
