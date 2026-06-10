@@ -92,7 +92,16 @@ setInterval(() => {
 
 export const apiService = {
   getLatestData: async (): Promise<SensorData> => {
-    return Promise.resolve(currentSensorData);
+    try {
+      const response = await fetch("http://192.168.29.45:5000/api/latest");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to fetch latest data, falling back to mock data:", error);
+      return currentSensorData;
+    }
   },
 
   getHistory: async (_limit: number = 100): Promise<SensorData[]> => {
@@ -104,18 +113,31 @@ export const apiService = {
   },
 
   sendCommand: async (command: string): Promise<void> => {
-    if (command === 'start') mockPumpState = 'running';
-    else if (command === 'stop') mockPumpState = 'stopped';
-    else if (command === 'emergency_stop') mockPumpState = 'error';
-    else if (command === 'reset') {
-      mockPumpState = 'stopped';
-      mockTempWinding = 25.0;
-      mockTempBearing = 25.0;
-      mockTempAmbient = 25.0;
-      mockCurrent = 0.0;
-      mockSpeed = 0;
+    try {
+      const response = await fetch("http://192.168.29.45:5000/api/command", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ command }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Failed to send command to API, falling back to mock behavior:", error);
+      if (command === 'start') mockPumpState = 'running';
+      else if (command === 'stop') mockPumpState = 'stopped';
+      else if (command === 'emergency_stop') mockPumpState = 'error';
+      else if (command === 'reset') {
+        mockPumpState = 'stopped';
+        mockTempWinding = 25.0;
+        mockTempBearing = 25.0;
+        mockTempAmbient = 25.0;
+        mockCurrent = 0.0;
+        mockSpeed = 0;
+      }
     }
-    return Promise.resolve();
   },
 
   getLogs: async (_limit: number = 100): Promise<SystemLog[]> => {
