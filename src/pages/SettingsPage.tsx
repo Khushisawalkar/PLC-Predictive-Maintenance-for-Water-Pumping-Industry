@@ -1,6 +1,17 @@
+import { useState } from 'react';
 import { Settings, Network, Database, Shield } from 'lucide-react';
+import { getApiUrl } from '../services/api';
 
 export function SettingsPage() {
+  const apiUrl = getApiUrl();
+  const [speedWarning, setSpeedWarning] = useState(localStorage.getItem('speedWarning') || "2500");
+  const [speedFault, setSpeedFault] = useState(localStorage.getItem('speedFault') || "2800");
+
+  const updateThreshold = (key: string, val: string, setter: any) => {
+    setter(val);
+    localStorage.setItem(key, val);
+  };
+
   return (
     <div className="bg-ind-card border border-ind-border rounded h-full p-6 flex flex-col gap-6 overflow-y-auto">
       <div className="flex items-center gap-3 border-b border-ind-border pb-4">
@@ -16,21 +27,20 @@ export function SettingsPage() {
           </div>
           <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <span className="text-xs md:text-sm font-medium text-ind-text">PLC Communication</span>
+              <span className="text-xs md:text-sm font-medium text-ind-text">Communication Protocol</span>
               <select className="bg-ind-bg border border-ind-border rounded px-3 py-1.5 text-[10px] md:text-xs lg:text-sm font-mono text-ind-text outline-none">
+                <option>HTTP REST API (ESP32)</option>
+                <option>MQTT / WebSockets</option>
                 <option>Modbus TCP/IP</option>
-                <option>OPC UA</option>
-                <option>Ethernet/IP</option>
-                <option>MQTT</option>
               </select>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-xs md:text-sm font-medium text-ind-text">IP Address</span>
-              <input type="text" value="192.168.1.100" readOnly className="bg-ind-bg border border-ind-border rounded px-3 py-1.5 text-[10px] md:text-xs lg:text-sm font-mono text-ind-text outline-none w-28 md:w-36 text-right" />
+              <span className="text-xs md:text-sm font-medium text-ind-text">Active Backend URL</span>
+              <input type="text" value={apiUrl} readOnly className="bg-ind-bg border border-ind-border rounded px-3 py-1.5 text-[10px] md:text-xs lg:text-sm font-mono text-ind-text outline-none w-48 md:w-64 text-right" />
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-xs md:text-sm font-medium text-ind-text">Port</span>
-              <input type="text" value="502" readOnly className="bg-ind-bg border border-ind-border rounded px-3 py-1.5 text-[10px] md:text-xs lg:text-sm font-mono text-ind-text outline-none w-16 md:w-24 text-right" />
+              <span className="text-xs md:text-sm font-medium text-ind-text">Auto-Discovery</span>
+              <span className="bg-green-500/20 text-green-400 border border-green-500/30 rounded px-3 py-1 text-[10px] md:text-xs font-mono">Enabled</span>
             </div>
           </div>
         </div>
@@ -58,8 +68,8 @@ export function SettingsPage() {
               </select>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-xs md:text-sm font-medium text-ind-text">Backend URI</span>
-              <input type="text" value="mongodb://localhost:27017" readOnly className="bg-ind-bg border border-ind-border rounded px-3 py-1.5 text-[10px] md:text-xs lg:text-sm font-mono text-ind-text outline-none w-40 md:w-56 text-right opacity-50" />
+              <span className="text-xs md:text-sm font-medium text-ind-text">Active Database</span>
+              <input type="text" value="Auto (MongoDB / Memory)" readOnly className="bg-ind-bg border border-ind-border rounded px-3 py-1.5 text-[10px] md:text-xs lg:text-sm font-mono text-ind-text outline-none w-48 md:w-56 text-right opacity-50" />
             </div>
           </div>
         </div>
@@ -104,8 +114,8 @@ export function SettingsPage() {
                <div className="flex justify-between items-center border-b border-ind-border pb-3">
                 <span className="text-xs md:text-sm font-medium text-ind-text">Speed (RPM)</span>
                 <div className="flex gap-2">
-                  <input type="text" value="2500" readOnly className="bg-ind-border/50 border border-amber-500/30 rounded px-2 py-1 text-[10px] md:text-xs font-mono text-amber-400 w-10 md:w-14 text-center" title="Warning" />
-                  <input type="text" value="2800" readOnly className="bg-ind-border/50 border border-red-500/30 rounded px-2 py-1 text-[10px] md:text-xs font-mono text-red-400 w-10 md:w-14 text-center" title="Fault" />
+                  <input type="text" value={speedWarning} onChange={(e) => updateThreshold('speedWarning', e.target.value, setSpeedWarning)} className="bg-ind-bg hover:bg-ind-border/30 focus:bg-ind-border/50 border border-amber-500/50 rounded px-2 py-1 text-[10px] md:text-xs font-mono text-amber-400 w-12 md:w-16 text-center outline-none cursor-text transition-colors" title="Warning" />
+                  <input type="text" value={speedFault} onChange={(e) => updateThreshold('speedFault', e.target.value, setSpeedFault)} className="bg-ind-bg hover:bg-ind-border/30 focus:bg-ind-border/50 border border-red-500/50 rounded px-2 py-1 text-[10px] md:text-xs font-mono text-red-400 w-12 md:w-16 text-center outline-none cursor-text transition-colors" title="Fault" />
                 </div>
               </div>
               <div className="flex justify-between items-center border-b border-ind-border pb-3">
@@ -118,7 +128,7 @@ export function SettingsPage() {
             </div>
           </div>
           <div className="mt-6 text-[10px] md:text-xs text-ind-text-muted text-center italic">
-            * Thresholds are locked in Simulation Mode. Connect real hardware to modify.
+            * Speed thresholds are now editable. Click the numbers to change them according to your ESP code.
           </div>
         </div>
       </div>

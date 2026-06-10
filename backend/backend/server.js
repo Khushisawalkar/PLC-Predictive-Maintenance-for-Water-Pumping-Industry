@@ -12,25 +12,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log(err));
-
-let latestTemperature = { temperature: 25.0, createdAt: new Date() };
+let latestData = { temperature: 25.0, speed: 0, vibration: 0, createdAt: new Date() };
 
 app.post("/api/temperature", async (req, res) => {
 
   try {
 
-    const { temperature } = req.body;
+    const { temperature, speed, vibration } = req.body;
 
-    console.log("Temperature:", temperature);
+    console.log("Data Received - Temp:", temperature, "Speed:", speed, "Vibration:", vibration);
 
-    latestTemperature = { temperature, createdAt: new Date() };
+    if (temperature !== undefined) latestData.temperature = temperature;
+    if (speed !== undefined) latestData.speed = speed;
+    if (vibration !== undefined) latestData.vibration = vibration;
+    latestData.createdAt = new Date();
 
     const newData = new Temperature({
-      temperature
+      temperature,
+      speed
     });
 
     // Try to save to DB, but don't fail if DB is unavailable
@@ -57,9 +56,9 @@ app.get("/api/latest", async (req, res) => {
       .sort({ createdAt: -1 })
       .catch(() => null);
 
-    res.json(data || latestTemperature);
+    res.json(data || latestData);
   } catch (error) {
-    res.json(latestTemperature);
+    res.json(latestData);
   }
 });
 

@@ -51,10 +51,17 @@ setInterval(() => {
     mockSpeed = 0;
   }
 
+  const speedFaultThreshold = parseInt(localStorage.getItem('speedFault') || "2800", 10);
+  const speedWarningThreshold = parseInt(localStorage.getItem('speedWarning') || "2500", 10);
+
   const tWNorm = Math.max(0, Math.min(1, (mockTempWinding - 20) / 80));
   const tBNorm = Math.max(0, Math.min(1, (mockTempBearing - 20) / 60));
   const cNorm = Math.max(0, Math.min(1, (mockCurrent - 10) / 15)); // Nominally 10A, max 25A 
-  const sNorm = Math.max(0, Math.min(1, Math.abs(mockSpeed - 1500) / 1500)); 
+  
+  // Normalize speed based on the user's warning threshold
+  const speedDiff = Math.abs(mockSpeed - (speedWarningThreshold * 0.6)); // assuming nominal is 60% of warning
+  const maxSpeedDiff = speedWarningThreshold - (speedWarningThreshold * 0.6);
+  const sNorm = Math.max(0, Math.min(1, speedDiff / (maxSpeedDiff || 1))); 
 
   // healthIndex prioritizes Winding Temp and Current
   const healthIndex = (tWNorm * 0.25) + (tBNorm * 0.15) + (cNorm * 0.4) + (sNorm * 0.2);
@@ -68,7 +75,13 @@ setInterval(() => {
   const isBearingSpike = (mockTempBearing - currentSensorData.tempBearing) > 8;
   const isCurrentSpike = (mockCurrent - currentSensorData.current) > 5;
   const isSpeedSpike = (mockSpeed - currentSensorData.speed) > 500;
-  const isCriticalAbsolute = mockTempWinding > 80 || mockTempBearing > 70 || mockCurrent > 22 || mockSpeed > 2800;
+  
+  const isCriticalAbsolute = mockTempWinding > 80 || mockTempBearing > 70 || mockCurrent > 22 || mockSpeed >= speedFaultThreshold;
+  
+  // Set warning if we hit warning threshold
+  if (mockSpeed >= speedWarningThreshold && mockSpeed < speedFaultThreshold) {
+      if (status !== 'fault') status = 'warning';
+  }
 
   if (isWindingSpike || isBearingSpike || isCurrentSpike || isSpeedSpike || isCriticalAbsolute) {
     status = 'fault';
@@ -91,7 +104,7 @@ setInterval(() => {
 }, 1000);
 
 // Helper to automatically find the backend on the same network
-const getApiUrl = () => {
+export const getApiUrl = () => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
   // If accessed from another device (e.g. 192.168.x.x), assume backend is on the same host
   if (typeof window !== 'undefined' && window.location.hostname && window.location.hostname !== 'localhost') {
@@ -114,13 +127,19 @@ export const apiService = {
       }
       const data = await response.json();
       
-      // If the backend only returns partial data (e.g. from the Temperature model)
-      if (data && data.temperature !== undefined) {
-        mockTempWinding = data.temperature; // Inject real temp into the simulation loop!
+      // Inject real data into the simulation loop if it exists!
+      if (data) {
+        if (data.temperature !== undefined) mockTempWinding = data.temperature;
+        if (data.speed !== undefined) mockSpeed = data.speed;
+        
+        // Map vibration to Ambient Temp in the UI for now until we add a dedicated Vibration card
+        if (data.vibration !== undefined) mockTempAmbient = data.vibration; 
         
         return {
           ...currentSensorData,
-          tempWinding: data.temperature,
+          tempWinding: data.temperature !== undefined ? data.temperature : currentSensorData.tempWinding,
+          speed: data.speed !== undefined ? data.speed : currentSensorData.speed,
+          tempAmbient: data.vibration !== undefined ? data.vibration : currentSensorData.tempAmbient,
           timestamp: data.createdAt || currentSensorData.timestamp
         };
       }
