@@ -1,124 +1,99 @@
 import type { SensorData, SystemLog, SystemStatus } from '../types';
 
-let mockPumpState: 'running' | 'stopped' | 'error' = 'stopped';
-let mockTempWinding = 25.0;
-let mockTempBearing = 25.0;
-let mockTempAmbient = 25.0;
-let mockCurrent = 0.0;
-let mockSpeed = 0;
-
-let currentSensorData: SensorData = {
-  timestamp: new Date().toISOString(),
-  tempWinding: 25.0,
-  tempBearing: 25.0,
-  tempAmbient: 25.0,
-  current: 0.0,
-  speed: 0,
-  healthIndex: 0.0,
-  status: 'healthy'
-};
-
-// Start the backend simulation loop
-setInterval(() => {
-  if (mockPumpState === 'running') {
-    let tempSpike = 0;
-    let currentSpike = 0;
-    
-    // Fault simulation
-    if (Math.random() > 0.97) {
-      tempSpike = Math.random() * 10;
-      currentSpike = Math.random() * 8; // Spike up to +8A
-    }
-
-    mockTempWinding = Math.max(20, Math.min(100, mockTempWinding + (Math.random() - 0.5) * 2.0 + tempSpike));
-    mockTempBearing = Math.max(20, Math.min(80, mockTempBearing + (Math.random() - 0.5) * 1.0 + tempSpike * 0.5));
-    mockTempAmbient = Math.max(20, Math.min(45, mockTempAmbient + (Math.random() - 0.5) * 0.2));
-    
-    // Normal running current around 12A
-    if (mockCurrent < 10) mockCurrent += 2; 
-    else mockCurrent = Math.max(10, Math.min(30, mockCurrent + (Math.random() - 0.5) * 1.0 + currentSpike));
-    
-    if (mockSpeed < 1300) {
-      mockSpeed = Math.min(1500, mockSpeed + 300);
-    } else {
-      mockSpeed = Math.max(1300, Math.min(1700, mockSpeed + (Math.random() - 0.5) * 100));
-    }
-  } else {
-    mockTempWinding = Math.max(25, mockTempWinding - 1.5);
-    mockTempBearing = Math.max(25, mockTempBearing - 0.8);
-    mockTempAmbient = Math.max(25, mockTempAmbient - 0.1);
-    mockCurrent = Math.max(0, mockCurrent - 2.0); // drop to 0 quickly
-    mockSpeed = 0;
-  }
-
-  const speedFaultThreshold = parseInt(localStorage.getItem('speedFault') || "2800", 10);
-  const speedWarningThreshold = parseInt(localStorage.getItem('speedWarning') || "2500", 10);
-
-  const tWNorm = Math.max(0, Math.min(1, (mockTempWinding - 20) / 80));
-  const tBNorm = Math.max(0, Math.min(1, (mockTempBearing - 20) / 60));
-  const cNorm = Math.max(0, Math.min(1, (mockCurrent - 10) / 15)); // Nominally 10A, max 25A 
-  
-  // Normalize speed based on the user's warning threshold
-  const speedDiff = Math.abs(mockSpeed - (speedWarningThreshold * 0.6)); // assuming nominal is 60% of warning
-  const maxSpeedDiff = speedWarningThreshold - (speedWarningThreshold * 0.6);
-  const sNorm = Math.max(0, Math.min(1, speedDiff / (maxSpeedDiff || 1))); 
-
-  // healthIndex prioritizes Winding Temp and Current
-  const healthIndex = (tWNorm * 0.25) + (tBNorm * 0.15) + (cNorm * 0.4) + (sNorm * 0.2);
-  
-  let status: SystemStatus = 'healthy';
-  if (healthIndex > 0.8) status = 'fault';
-  else if (healthIndex > 0.6) status = 'warning';
-
-  // EMERGENCY STOP LOGIC: Drastic increases or absolute critical thresholds
-  const isWindingSpike = (mockTempWinding - currentSensorData.tempWinding) > 10;
-  const isBearingSpike = (mockTempBearing - currentSensorData.tempBearing) > 8;
-  const isCurrentSpike = (mockCurrent - currentSensorData.current) > 5;
-  const isSpeedSpike = (mockSpeed - currentSensorData.speed) > 500;
-  
-  const isCriticalAbsolute = mockTempWinding > 80 || mockTempBearing > 70 || mockCurrent > 22 || mockSpeed >= speedFaultThreshold;
-  
-  // Set warning if we hit warning threshold
-  if (mockSpeed >= speedWarningThreshold && mockSpeed < speedFaultThreshold) {
-      if (status !== 'fault') status = 'warning';
-  }
-
-  if (isWindingSpike || isBearingSpike || isCurrentSpike || isSpeedSpike || isCriticalAbsolute) {
-    status = 'fault';
-  }
-
-  if (status === 'fault' && mockPumpState === 'running') {
-    mockPumpState = 'error'; // Auto-stop logic built into the backend
-  }
-
-  currentSensorData = {
-    timestamp: new Date().toISOString(),
-    tempWinding: mockTempWinding,
-    tempBearing: mockTempBearing,
-    tempAmbient: mockTempAmbient,
-    current: mockCurrent,
-    speed: mockSpeed,
-    healthIndex,
-    status
-  };
-}, 1000);
-
 // Helper to automatically find the backend on the same network
 export const getApiUrl = () => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
-  // If accessed from another device (e.g. 192.168.x.x), assume backend is on the same host
   if (typeof window !== 'undefined' && window.location.hostname && window.location.hostname !== 'localhost') {
-    // Check if it's GitHub Pages
     if (window.location.hostname.includes('github.io')) {
-      return "http://localhost:5000"; // Will trigger fallback on GitHub Pages
+      return "http://localhost:5000";
     }
     return `http://${window.location.hostname}:5000`;
   }
   return "http://localhost:5000";
 };
 
+function computeHealthStatus(speed: number, current: number, tempWinding: number, vibration: number): { status: SystemStatus, overallHealth: number } {
+  let status: SystemStatus = 'healthy';
+  let overallHealth = 1.0;
+
+  if (speed === 0 && current === 0) {
+    overallHealth = 1.0; 
+  } else if (speed === 0 && current > 1.0) {
+    status = 'fault';
+    overallHealth = 0.1;
+  } else {
+    // 1.0 is perfectly healthy, 0.0 is failure.
+    // Temperature: nominal is around 40-45, bad is >55
+    const tHealth = 1.0 - Math.max(0, Math.min(1, (tempWinding - 40) / 15));
+    // Current: nominal is ~3.45, bad is >5.0
+    const cHealth = 1.0 - Math.max(0, Math.min(1, Math.abs(current - 3.45) / 1.5));
+    // Speed: nominal is ~1350, bad is < 1000 or > 1600
+    const sHealth = 1.0 - Math.max(0, Math.min(1, Math.abs(speed - 1350) / 400));
+    // Vibration: nominal is < 2000, bad is > 3000
+    const vHealth = 1.0 - Math.max(0, Math.min(1, vibration / 4000));
+
+    overallHealth = (tHealth * 0.25) + (cHealth * 0.25) + (sHealth * 0.25) + (vHealth * 0.25);
+
+    if (overallHealth < 0.6) status = 'fault';
+    else if (overallHealth < 0.8) status = 'warning';
+  }
+  return { status, overallHealth };
+}
+
+const defaultSensorData: SensorData = {
+  timestamp: new Date().toISOString(),
+  tempWinding: 0,
+  tempBearing: 0,
+  tempAmbient: 0,
+  current: 0,
+  speed: 0,
+  vibration: 0,
+  voltage: 0,
+  pressure: 0,
+  flowRate: 0,
+  waterLevel: 0,
+  oilQuality: 0,
+  mechanicalHealth: 0,
+  electricalHealth: 0,
+  hydraulicHealth: 0,
+  overallHealth: 0,
+  pumpEfficiency: 0,
+  powerConsumption: 0,
+  status: 'healthy'
+};
+
+function mapToSensorData(item: any): SensorData {
+  const tempWinding = item.temperature !== undefined ? item.temperature : 0;
+  const current = item.current !== undefined ? item.current : 0;
+  const speed = item.speed !== undefined ? item.speed : 0;
+  const vibration = item.vibration !== undefined ? item.vibration : 0;
+
+  const tempBearing = tempWinding > 0 ? tempWinding - 2.5 : 0;
+  const tempAmbient = tempWinding > 0 ? 32.0 : 0;
+
+  const { status, overallHealth } = computeHealthStatus(speed, current, tempWinding, vibration);
+
+  return {
+    ...defaultSensorData,
+    timestamp: item.createdAt || new Date().toISOString(),
+    tempWinding,
+    tempBearing,
+    tempAmbient,
+    speed,
+    current,
+    vibration,
+    mechanicalHealth: overallHealth,
+    electricalHealth: overallHealth,
+    hydraulicHealth: overallHealth,
+    overallHealth: overallHealth,
+    pumpEfficiency: speed > 0 ? 82.5 + (overallHealth * 5) : 0,
+    powerConsumption: speed > 0 ? current * 400 * 1.732 / 1000 : 0,
+    status
+  };
+}
+
 export const apiService = {
-  getLatestData: async (): Promise<SensorData> => {
+  getLatestData: async (): Promise<SensorData | null> => {
     try {
       const apiUrl = getApiUrl();
       const response = await fetch(`${apiUrl}/api/latest`);
@@ -127,32 +102,13 @@ export const apiService = {
       }
       const data = await response.json();
       
-      // Inject real data into the simulation loop if it exists!
-      if (data) {
-        if (data.temperature !== undefined) mockTempWinding = data.temperature;
-        if (data.speed !== undefined) mockSpeed = data.speed;
-        
-        // Map vibration to Ambient Temp in the UI for now until we add a dedicated Vibration card
-        if (data.vibration !== undefined) mockTempAmbient = data.vibration; 
-        
-        return {
-          ...currentSensorData,
-          tempWinding: data.temperature !== undefined ? data.temperature : currentSensorData.tempWinding,
-          speed: data.speed !== undefined ? data.speed : currentSensorData.speed,
-          tempAmbient: data.vibration !== undefined ? data.vibration : currentSensorData.tempAmbient,
-          timestamp: data.createdAt || currentSensorData.timestamp
-        };
+      if (data && Object.keys(data).length > 0) {
+        return mapToSensorData(data);
       }
-      
-      // If the backend returns a full SensorData object
-      if (data && data.tempWinding !== undefined) {
-        return data;
-      }
-
-      return currentSensorData;
+      return null;
     } catch (error) {
-      console.warn("Backend unavailable, using simulated data");
-      return currentSensorData;
+      console.error("Error fetching latest data:", error);
+      return null;
     }
   },
 
@@ -165,22 +121,12 @@ export const apiService = {
       }
       const data = await response.json();
       
-      // Map the backend data format to our SensorData frontend format
       if (Array.isArray(data)) {
-        return data.map(item => ({
-          timestamp: item.createdAt,
-          tempWinding: item.temperature !== undefined ? item.temperature : 25.0,
-          speed: item.speed !== undefined ? item.speed : 0,
-          tempAmbient: item.vibration !== undefined ? item.vibration : 25.0,
-          tempBearing: 25.0, // Defaults for unmonitored sensors
-          current: 0.0,
-          healthIndex: 0.5,
-          status: 'healthy'
-        }));
+        return data.map(item => mapToSensorData(item));
       }
       return [];
     } catch (error) {
-      console.warn("Backend history unavailable");
+      console.error("Error fetching history:", error);
       return [];
     }
   },
@@ -202,31 +148,8 @@ export const apiService = {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      // Update local state so UI reflects the command
-      if (command === 'start') mockPumpState = 'running';
-      else if (command === 'stop') mockPumpState = 'stopped';
-      else if (command === 'emergency_stop') mockPumpState = 'error';
-      else if (command === 'reset') {
-        mockPumpState = 'stopped';
-        mockTempWinding = 25.0;
-        mockTempBearing = 25.0;
-        mockTempAmbient = 25.0;
-        mockCurrent = 0.0;
-        mockSpeed = 0;
-      }
     } catch (error) {
-      console.warn(`Backend unavailable, simulating command: ${command}`);
-      if (command === 'start') mockPumpState = 'running';
-      else if (command === 'stop') mockPumpState = 'stopped';
-      else if (command === 'emergency_stop') mockPumpState = 'error';
-      else if (command === 'reset') {
-        mockPumpState = 'stopped';
-        mockTempWinding = 25.0;
-        mockTempBearing = 25.0;
-        mockTempAmbient = 25.0;
-        mockCurrent = 0.0;
-        mockSpeed = 0;
-      }
+      console.error(`Error sending command: ${command}`, error);
     }
   },
 

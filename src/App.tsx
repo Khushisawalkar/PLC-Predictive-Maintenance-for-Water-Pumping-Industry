@@ -56,9 +56,9 @@ export default function App() {
 
   useEffect(() => {
     if (isLightMode) {
-      document.body.classList.add('light-mode');
+      document.documentElement.classList.add('light-mode');
     } else {
-      document.body.classList.remove('light-mode');
+      document.documentElement.classList.remove('light-mode');
     }
   }, [isLightMode]);
 
@@ -160,8 +160,8 @@ export default function App() {
           </div>
           <div className="flex items-center gap-3">
             <div className="toggle-switch mr-2 shrink-0">
-              <label className="switch-label">
-                <input type="checkbox" className="checkbox" checked={isLightMode} onChange={() => setIsLightMode(!isLightMode)} />
+              <label className="switch-label" htmlFor="theme-toggle">
+                <input id="theme-toggle" type="checkbox" className="checkbox" checked={isLightMode} onChange={() => setIsLightMode(!isLightMode)} />
                 <span className="slider"></span>
               </label>
             </div>
@@ -179,7 +179,7 @@ export default function App() {
             </div>
             <div className="hidden md:flex items-center gap-1.5 shrink-0">
               <Database size={14} className={deviceStatus.database === 'online' ? "text-orange-400" : "text-red-400"} />
-              <span className="text-xs md:text-sm text-ind-text-dim">MySQL</span>
+              <span className="text-xs md:text-sm text-ind-text-dim">MongoDB</span>
             </div>
             <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded border text-xs md:text-sm font-bold shrink-0 ${
               currentData.status === 'healthy' ? 'border-emerald-500/30 text-emerald-400 bg-emerald-500/10' :
@@ -237,7 +237,7 @@ export default function App() {
           <span className="text-xs md:text-sm text-ind-text-dim hidden sm:inline">Samples: <span className="font-mono">{history.length}</span></span>
           <span className="text-xs md:text-sm text-ind-text-dim hidden sm:inline">|</span>
           <span className={`text-xs md:text-sm ${currentData.status === 'healthy' ? 'text-emerald-600' : currentData.status === 'warning' ? 'text-amber-600' : 'text-red-600'}`}>
-            HI: <span className="font-mono font-bold">{currentData.healthIndex.toFixed(3)}</span>
+            HI: <span className="font-mono font-bold">{currentData.overallHealth.toFixed(3)}</span>
           </span>
         </footer>
       </div>

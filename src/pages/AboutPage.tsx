@@ -52,7 +52,7 @@ export function AboutPage() {
              </div>
              <div className="flex-1 bg-ind-card-hover border border-orange-500/30 rounded-lg p-4 flex flex-col items-center gap-2 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
                <div className="p-2 bg-orange-500/10 rounded-full text-orange-400"><Database className="w-4 h-4 md:w-5 md:h-5" /></div>
-               <div className="font-bold text-xs md:text-sm text-ind-text text-center">MySQL Server<br/><span className="text-xs text-ind-text-muted font-normal">Database</span></div>
+               <div className="font-bold text-xs md:text-sm text-ind-text text-center">MongoDB Server<br/><span className="text-xs text-ind-text-muted font-normal">Database</span></div>
              </div>
           </div>
 

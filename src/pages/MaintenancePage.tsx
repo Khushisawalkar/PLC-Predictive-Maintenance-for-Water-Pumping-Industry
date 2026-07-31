@@ -2,7 +2,7 @@ import type { Prediction, SensorData } from '../types';
 import { Wrench, ShieldAlert, Cpu } from 'lucide-react';
 
 export function MaintenancePage({ predictions, currentData }: { predictions: Prediction[], currentData: SensorData }) {
-  const overallHealth = currentData.healthIndex;
+  const overallHealth = currentData.overallHealth;
 
   return (
     <div className="flex flex-col gap-4 h-full">

@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { SensorData, Alert, SystemLog, DeviceStatus, Prediction, PumpState, PumpMode, SystemStatus } from '../types';
 import { apiService } from '../services/api';
-
-const MAX_HISTORY = 100;
-
+const MAX_HISTORY = 1000;
 export function useMonitoring() {
   const [isMonitoring, setIsMonitoring] = useState(true);
   const [pumpState, setPumpState] = useState<PumpState>('stopped');
@@ -11,12 +9,23 @@ export function useMonitoring() {
 
   const [currentData, setCurrentData] = useState<SensorData>({
     timestamp: new Date().toISOString(),
-    tempWinding: 25.0,
-    tempBearing: 25.0,
-    tempAmbient: 25.0,
-    current: 0.0,
+    tempWinding: 0,
+    tempBearing: 0,
+    tempAmbient: 0,
+    vibration: 0,
+    current: 0,
+    voltage: 0,
+    pressure: 0,
+    flowRate: 0,
     speed: 0,
-    healthIndex: 0.0,
+    waterLevel: 0,
+    oilQuality: 0,
+    mechanicalHealth: 0,
+    electricalHealth: 0,
+    hydraulicHealth: 0,
+    overallHealth: 0,
+    pumpEfficiency: 0,
+    powerConsumption: 0,
     status: 'healthy'
   });
 
@@ -84,6 +93,8 @@ export function useMonitoring() {
     apiService.getHistory().then(initialHistory => {
       if (initialHistory && initialHistory.length > 0) {
         setHistory(initialHistory);
+      } else {
+        setHistory([]);
       }
     }).catch(console.error);
     
@@ -95,9 +106,14 @@ export function useMonitoring() {
 
     let lastLoggedMinute = new Date().getMinutes();
 
-    const interval = setInterval(async () => {
+    const fetchLatest = async () => {
       try {
         const newData = await apiService.getLatestData();
+        
+        if (!newData) {
+            // DB is empty, do not update UI with simulated data or errors
+            return;
+        }
 
         // The frontend state is completely driven by the backend data
         if (newData.status === 'fault') {
@@ -111,6 +127,9 @@ export function useMonitoring() {
         setCurrentData(newData);
 
         setHistory(h => {
+          if (h.length > 0 && h[h.length - 1].timestamp === newData.timestamp) {
+            return h;
+          }
           const newHistory = [...h, newData];
           if (newHistory.length > MAX_HISTORY) newHistory.shift();
           return newHistory;
@@ -118,10 +137,10 @@ export function useMonitoring() {
 
         // Generate UI alerts based on backend data
         if (newData.status === 'fault') {
-          addAlert('fault', `Critical System Health Index: ${newData.healthIndex.toFixed(2)}`, 'system');
+          addAlert('fault', `Critical System Health Index: ${newData.overallHealth.toFixed(2)}`, 'system');
           setLastFaultTimestamp(new Date().toISOString());
         } else if (newData.status === 'warning') {
-          addAlert('warning', `System Health Warning: ${newData.healthIndex.toFixed(2)}`, 'system');
+          addAlert('warning', `System Health Warning: ${newData.overallHealth.toFixed(2)}`, 'system');
         }
 
         // Drastic Change (Spike) Detection
@@ -129,8 +148,8 @@ export function useMonitoring() {
         let emergencyTriggered = false;
         if (newData.tempWinding - prevData.tempWinding > 10) { addAlert('fault', 'Emergency Stop: Drastic Winding Temp Spike', 'tempWinding'); emergencyTriggered = true; }
         if (newData.tempBearing - prevData.tempBearing > 8) { addAlert('fault', 'Emergency Stop: Drastic Bearing Temp Spike', 'tempBearing'); emergencyTriggered = true; }
-        if (newData.current - prevData.current > 5) { addAlert('fault', 'Emergency Stop: Drastic Current Spike', 'current'); emergencyTriggered = true; }
-        if (newData.speed - prevData.speed > 500) { addAlert('fault', 'Emergency Stop: Drastic Speed Spike', 'speed'); emergencyTriggered = true; }
+        if (newData.current - prevData.current > 1.0) { addAlert('fault', 'Emergency Stop: Drastic Current Spike', 'current'); emergencyTriggered = true; }
+        if (newData.speed - prevData.speed > 200) { addAlert('fault', 'Emergency Stop: Drastic Speed Spike', 'speed'); emergencyTriggered = true; }
 
         if (emergencyTriggered && pumpState === 'running') {
           apiService.sendCommand('emergency_stop').catch(console.error);
@@ -139,30 +158,36 @@ export function useMonitoring() {
 
         lastDataRef.current = newData;
 
-        if (newData.tempWinding > 80) addAlert('fault', 'Critical Winding Temperature Exceeded', 'tempWinding');
-        else if (newData.tempWinding > 70) addAlert('warning', 'High Winding Temperature Warning', 'tempWinding');
+        if (newData.tempWinding > 55) addAlert('fault', 'Critical Winding Temperature Exceeded', 'tempWinding');
+        else if (newData.tempWinding > 50) addAlert('warning', 'High Winding Temperature Warning', 'tempWinding');
 
-        if (newData.tempBearing > 70) addAlert('fault', 'Critical Bearing Temperature Exceeded', 'tempBearing');
-        else if (newData.tempBearing > 60) addAlert('warning', 'High Bearing Temperature Warning', 'tempBearing');
+        if (newData.tempBearing > 55) addAlert('fault', 'Critical Bearing Temperature Exceeded', 'tempBearing');
+        else if (newData.tempBearing > 50) addAlert('warning', 'High Bearing Temperature Warning', 'tempBearing');
 
-        if (newData.tempAmbient > 40) addAlert('warning', 'High Ambient Temperature Warning', 'tempAmbient');
+        if (newData.tempAmbient > 45) addAlert('warning', 'High Ambient Temperature Warning', 'tempAmbient');
 
-        if (newData.current > 22) addAlert('fault', 'Critical Overcurrent Detected', 'current');
-        else if (newData.current > 18) addAlert('warning', 'High Current Warning', 'current');
+        if (newData.current > 5.0) addAlert('fault', 'Critical Overcurrent Detected', 'current');
+        else if (newData.current > 4.2) addAlert('warning', 'High Current Warning', 'current');
 
-        if (newData.speed > 2800) addAlert('fault', 'Critical Overspeed Detected', 'speed');
-        else if (newData.speed > 2500) addAlert('warning', 'High Speed Warning', 'speed');
+        if (newData.speed > 2000) addAlert('fault', 'Critical Overspeed Detected', 'speed');
+        else if (newData.speed > 1600) addAlert('warning', 'High Speed Warning', 'speed');
+
+        if (newData.vibration > 25000) addAlert('fault', 'Critical Vibration Detected', 'vibration' as any);
+        else if (newData.vibration > 22000) addAlert('warning', 'High Vibration Warning', 'vibration' as any);
 
         const currentMinute = new Date().getMinutes();
         if (currentMinute !== lastLoggedMinute) {
           lastLoggedMinute = currentMinute;
-          addLog(`Periodic Data Log - Winding: ${newData.tempWinding.toFixed(1)}°C, Bearing: ${newData.tempBearing.toFixed(1)}°C, Ambient: ${newData.tempAmbient.toFixed(1)}°C, Current: ${newData.current.toFixed(1)}A, Speed: ${newData.speed.toFixed(0)}RPM, HI: ${(newData.healthIndex * 100).toFixed(1)}%`, 'info');
+          addLog(`Periodic Data Log - Winding: ${newData.tempWinding.toFixed(1)}°C, Bearing: ${newData.tempBearing.toFixed(1)}°C, Ambient: ${newData.tempAmbient.toFixed(1)}°C, Current: ${newData.current.toFixed(1)}A, Speed: ${newData.speed.toFixed(0)}RPM, HI: ${(newData.overallHealth * 100).toFixed(1)}%`, 'info');
         }
 
       } catch (error) {
         console.error("Failed to fetch latest data from backend:", error);
       }
-    }, 1000);
+    };
+
+    fetchLatest();
+    const interval = setInterval(fetchLatest, 3000);
 
     return () => clearInterval(interval);
   }, [isMonitoring, addAlert, addLog]);
@@ -220,32 +245,32 @@ export function useMonitoring() {
     const cNorm = Math.max(0, Math.min(1, (current - 10) / 15));
     const sNorm = Math.max(0, Math.min(1, Math.abs(speed - 1500) / 1500)); 
 
-    const healthIndex = (tWNorm * 0.25) + (tBNorm * 0.15) + (cNorm * 0.4) + (sNorm * 0.2);
+    const overallHealth = (tWNorm * 0.25) + (tBNorm * 0.15) + (cNorm * 0.4) + (sNorm * 0.2);
     
     let status: SystemStatus = 'healthy';
-    if (healthIndex > 0.8) status = 'fault';
-    else if (healthIndex > 0.6) status = 'warning';
+    if (overallHealth > 0.8) status = 'fault';
+    else if (overallHealth > 0.6) status = 'warning';
 
     if (status === 'fault') {
-      addAlert('fault', `Critical System Health Index: ${healthIndex.toFixed(2)}`, 'system');
+      addAlert('fault', `Critical System Health Index: ${overallHealth.toFixed(2)}`, 'system');
       setLastFaultTimestamp(new Date().toISOString());
     } else if (status === 'warning') {
-      addAlert('warning', `System Health Warning: ${healthIndex.toFixed(2)}`, 'system');
+      addAlert('warning', `System Health Warning: ${overallHealth.toFixed(2)}`, 'system');
     }
 
     const prevData = lastDataRef.current;
     let manualEmergencyTriggered = false;
     if (tempWinding - prevData.tempWinding > 10) { addAlert('fault', 'Emergency Stop: Drastic Winding Temp Spike', 'tempWinding'); status = 'fault'; manualEmergencyTriggered = true; }
     if (tempBearing - prevData.tempBearing > 8) { addAlert('fault', 'Emergency Stop: Drastic Bearing Temp Spike', 'tempBearing'); status = 'fault'; manualEmergencyTriggered = true; }
-    if (current - prevData.current > 5) { addAlert('fault', 'Emergency Stop: Drastic Current Spike', 'current'); status = 'fault'; manualEmergencyTriggered = true; }
-    if (speed - prevData.speed > 500) { addAlert('fault', 'Emergency Stop: Drastic Speed Spike', 'speed'); status = 'fault'; manualEmergencyTriggered = true; }
+    if (current - prevData.current > 1.0) { addAlert('fault', 'Emergency Stop: Drastic Current Spike', 'current'); status = 'fault'; manualEmergencyTriggered = true; }
+    if (speed - prevData.speed > 200) { addAlert('fault', 'Emergency Stop: Drastic Speed Spike', 'speed'); status = 'fault'; manualEmergencyTriggered = true; }
 
     if (manualEmergencyTriggered && pumpState === 'running') {
       apiService.sendCommand('emergency_stop').catch(console.error);
       setPumpState('error');
     }
 
-    if (tempWinding > 80 || tempBearing > 70 || current > 22 || speed > 2800) {
+    if (tempWinding > 80 || tempBearing > 70 || current > 5.0 || speed > 1600) {
       status = 'fault';
     }
 
@@ -257,11 +282,11 @@ export function useMonitoring() {
 
     if (tempAmbient > 40) addAlert('warning', 'High Ambient Temperature Warning', 'tempAmbient');
 
-    if (current > 22) addAlert('fault', 'Critical Overcurrent Detected', 'current');
-    else if (current > 18) addAlert('warning', 'High Current Warning', 'current');
+    if (current > 5.0) addAlert('fault', 'Critical Overcurrent Detected', 'current');
+    else if (current > 4.0) addAlert('warning', 'High Current Warning', 'current');
 
-    if (speed > 2800) addAlert('fault', 'Critical Overspeed Detected', 'speed');
-    else if (speed > 2500) addAlert('warning', 'High Speed Warning', 'speed');
+    if (speed > 1600) addAlert('fault', 'Critical Overspeed Detected', 'speed');
+    else if (speed > 1500) addAlert('warning', 'High Speed Warning', 'speed');
 
     const newData: SensorData = {
       timestamp: new Date().toISOString(),
@@ -270,7 +295,18 @@ export function useMonitoring() {
       tempAmbient,
       current,
       speed,
-      healthIndex,
+      vibration: 0.5,
+      voltage: 400.0,
+      pressure: 0.0,
+      flowRate: 0.0,
+      waterLevel: 85.0,
+      oilQuality: 98.0,
+      mechanicalHealth: 1.0,
+      electricalHealth: 1.0,
+      hydraulicHealth: 1.0,
+      overallHealth,
+      pumpEfficiency: 82.5,
+      powerConsumption: 0.0,
       status
     };
 

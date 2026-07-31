@@ -10,92 +10,49 @@ dotenv.config();
 
 const app = express();
 
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Atlas Connected successfully!"))
+  .catch(err => console.error("MongoDB Connection Error:", err));
+
 app.use(cors());
 app.use(express.json());
 
-let latestData = { temperature: 25.0, speed: 0, vibration: 0, createdAt: new Date() };
-
-let inMemoryHistory = [];
-const HISTORY_FILE = "./history.json";
-
-// Try to load history from disk if MongoDB is offline and the server restarted
-if (fs.existsSync(HISTORY_FILE)) {
-  try {
-    const rawData = fs.readFileSync(HISTORY_FILE);
-    inMemoryHistory = JSON.parse(rawData);
-    if (inMemoryHistory.length > 0) {
-      latestData = inMemoryHistory[inMemoryHistory.length - 1];
-    }
-  } catch (err) {
-    console.error("Error reading history file:", err);
-  }
-}
-
 app.post("/api/temperature", async (req, res) => {
-
   try {
-
-    const { temperature, speed, vibration } = req.body;
-
-    console.log("Data Received - Temp:", temperature, "Speed:", speed, "Vibration:", vibration);
-
-    if (temperature !== undefined) latestData.temperature = temperature;
-    if (speed !== undefined) latestData.speed = speed;
-    if (vibration !== undefined) latestData.vibration = vibration;
-    latestData.createdAt = new Date();
+    const { temperature, speed, vibration, current } = req.body;
+    console.log("Data Received - Temp:", temperature, "Speed:", speed, "Vibration:", vibration, "Current:", current);
 
     const newData = new Temperature({
       temperature,
-      speed
+      speed,
+      vibration,
+      current
     });
 
-    inMemoryHistory.push({ ...latestData });
-    if (inMemoryHistory.length > 100) inMemoryHistory.shift();
-    
-    // Save to local file as a backup in case MongoDB is down
-    fs.writeFile(HISTORY_FILE, JSON.stringify(inMemoryHistory), (err) => {
-      if (err) console.error("Error writing to history file:", err);
-    });
-
-    // Try to save to DB, but don't fail if DB is unavailable
-    await newData.save().catch(err => console.error("Mongo Save Error:", err.message));
-
-    res.json({
-      success: true
-    });
-
+    await newData.save();
+    res.json({ success: true });
   } catch (error) {
-
-    res.status(500).json({
-      success: false
-    });
-
+    console.error("Error saving data:", error);
+    res.status(500).json({ success: false });
   }
 });
 
 
 app.get("/api/latest", async (req, res) => {
   try {
-    const data = await Temperature
-      .findOne()
-      .sort({ createdAt: -1 })
-      .catch(() => null);
-
-    res.json(data || latestData);
+    const latest = await Temperature.findOne().sort({ createdAt: -1 });
+    res.json(latest || {});
   } catch (error) {
-    res.json(latestData);
+    res.status(500).json({});
   }
 });
 
 app.get("/api/history", async (req, res) => {
   try {
-    const data = await Temperature.find().sort({ createdAt: -1 }).limit(100);
-    if (data && data.length > 0) {
-      return res.json(data.reverse());
-    }
-    res.json(inMemoryHistory);
+    const history = await Temperature.find().sort({ createdAt: -1 }).limit(1000);
+    res.json(history.length > 0 ? history.reverse() : []);
   } catch (error) {
-    res.json(inMemoryHistory);
+    res.status(500).json([]);
   }
 });
 

@@ -4,10 +4,10 @@ import { Download, Table } from 'lucide-react';
 
 export function Analytics({ history, currentData }: { history: SensorData[], currentData: SensorData }) {
   const exportToCSV = () => {
-    const headers = ['Timestamp', 'Winding Temp', 'Bearing Temp', 'Ambient Temp', 'Current', 'Speed', 'Health Index', 'Status'];
+    const headers = ['Timestamp', 'Temperature (°C)', 'Vibration', 'Current (A)', 'Speed (RPM)', 'Health Index', 'Status'];
     const csvContent = [
       headers.join(','),
-      ...history.map(data => `"${data.timestamp}",${data.tempWinding.toFixed(2)},${data.tempBearing.toFixed(2)},${data.tempAmbient.toFixed(2)},${data.current.toFixed(2)},${data.speed.toFixed(0)},${data.healthIndex.toFixed(3)},"${data.status}"`)
+      ...history.map(data => `"${data.timestamp}",${data.tempWinding.toFixed(2)},${data.vibration.toFixed(2)},${data.current.toFixed(2)},${data.speed.toFixed(0)},${data.overallHealth.toFixed(3)},"${data.status}"`)
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -21,14 +21,14 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
     <div className="flex flex-col gap-4 min-h-full">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 shrink-0">
         <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col h-48">
-          <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2">Winding Temp (°C)</div>
+          <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2">Temperature (°C)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e2d3d" />
                 <XAxis dataKey="timestamp" hide />
                 <YAxis stroke="#ef4444" fontSize={10} domain={['auto', 'auto']} />
-                <Tooltip contentStyle={{ backgroundColor: '#070d13', border: '1px solid #1e2d3d' }} labelStyle={{ display: 'none' }} />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--theme-card)', border: '1px solid var(--theme-border)', color: 'var(--theme-text)' }} labelStyle={{ display: 'none' }} />
                 <Line type="monotone" dataKey="tempWinding" stroke="#ef4444" dot={false} strokeWidth={2} name="Winding" />
               </LineChart>
             </ResponsiveContainer>
@@ -36,30 +36,15 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
         </div>
 
         <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col h-48">
-          <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2">Bearing Temp (°C)</div>
-          <div className="flex-1 min-h-0">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={history}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e2d3d" />
-                <XAxis dataKey="timestamp" hide />
-                <YAxis stroke="#f97316" fontSize={10} domain={['auto', 'auto']} />
-                <Tooltip contentStyle={{ backgroundColor: '#070d13', border: '1px solid #1e2d3d' }} labelStyle={{ display: 'none' }} />
-                <Line type="monotone" dataKey="tempBearing" stroke="#f97316" dot={false} strokeWidth={2} name="Bearing" />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col h-48">
-          <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2">Ambient Temp (°C)</div>
+          <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2">Vibration (mm/s)</div>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={history}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e2d3d" />
                 <XAxis dataKey="timestamp" hide />
                 <YAxis stroke="#84cc16" fontSize={10} domain={['auto', 'auto']} />
-                <Tooltip contentStyle={{ backgroundColor: '#070d13', border: '1px solid #1e2d3d' }} labelStyle={{ display: 'none' }} />
-                <Line type="monotone" dataKey="tempAmbient" stroke="#84cc16" dot={false} strokeWidth={2} name="Ambient" />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--theme-card)', border: '1px solid var(--theme-border)', color: 'var(--theme-text)' }} labelStyle={{ display: 'none' }} />
+                <Line type="monotone" dataKey="vibration" stroke="#84cc16" dot={false} strokeWidth={2} name="Vibration" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -73,7 +58,7 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e2d3d" />
                 <XAxis dataKey="timestamp" hide />
                 <YAxis stroke="#f59e0b" fontSize={10} domain={['auto', 'auto']} />
-                <Tooltip contentStyle={{ backgroundColor: '#070d13', border: '1px solid #1e2d3d' }} labelStyle={{ display: 'none' }} />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--theme-card)', border: '1px solid var(--theme-border)', color: 'var(--theme-text)' }} labelStyle={{ display: 'none' }} />
                 <Line type="monotone" dataKey="current" stroke="#f59e0b" dot={false} strokeWidth={2} name="Current" />
               </LineChart>
             </ResponsiveContainer>
@@ -88,18 +73,18 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e2d3d" />
                 <XAxis dataKey="timestamp" hide />
                 <YAxis stroke="#0ea5e9" fontSize={10} domain={['auto', 'auto']} />
-                <Tooltip contentStyle={{ backgroundColor: '#070d13', border: '1px solid #1e2d3d' }} labelStyle={{ display: 'none' }} />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--theme-card)', border: '1px solid var(--theme-border)', color: 'var(--theme-text)' }} labelStyle={{ display: 'none' }} />
                 <Line type="monotone" dataKey="speed" stroke="#0ea5e9" dot={false} strokeWidth={2} name="Speed" />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col h-48">
+        <div className="bg-ind-card border border-ind-border rounded p-4 flex flex-col h-48 md:col-span-2 lg:col-span-2">
           <div className="text-xs md:text-sm font-semibold text-ind-text-muted tracking-wide mb-2 flex justify-between">
             <span>Health Index</span>
             <span className={`font-bold ${currentData.status === 'healthy' ? 'text-emerald-400' : currentData.status === 'warning' ? 'text-amber-400' : 'text-red-400'}`}>
-              {(currentData.healthIndex * 100).toFixed(1)}%
+              {(currentData.overallHealth * 100).toFixed(1)}%
             </span>
           </div>
           <div className="flex-1 min-h-0">
@@ -108,8 +93,8 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e2d3d" />
                 <XAxis dataKey="timestamp" hide />
                 <YAxis stroke="#10b981" fontSize={10} domain={[0, 1]} />
-                <Tooltip contentStyle={{ backgroundColor: '#070d13', border: '1px solid #1e2d3d' }} labelStyle={{ display: 'none' }} formatter={(val: any) => (val * 100).toFixed(1) + '%'} />
-                <Line type="monotone" dataKey="healthIndex" stroke="#10b981" dot={false} strokeWidth={2} name="Health" />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--theme-card)', border: '1px solid var(--theme-border)', color: 'var(--theme-text)' }} labelStyle={{ display: 'none' }} formatter={(val: any) => (val * 100).toFixed(1) + '%'} />
+                <Line type="monotone" dataKey="overallHealth" stroke="#10b981" dot={false} strokeWidth={2} name="Health" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -134,9 +119,8 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
             <thead className="bg-ind-card-active text-ind-text-dim sticky top-0 border-b border-ind-border">
               <tr>
                 <th className="p-3 font-normal">Timestamp</th>
-                <th className="p-3 font-normal">Winding (°C)</th>
-                <th className="p-3 font-normal">Bearing (°C)</th>
-                <th className="p-3 font-normal">Ambient (°C)</th>
+                <th className="p-3 font-normal">Temperature (°C)</th>
+                <th className="p-3 font-normal">Vibration</th>
                 <th className="p-3 font-normal">Current (A)</th>
                 <th className="p-3 font-normal">Speed (RPM)</th>
                 <th className="p-3 font-normal">Health Idx</th>
@@ -148,11 +132,10 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
                 <tr key={i} className="border-b border-ind-border/50 hover:bg-ind-card-active transition-colors text-ind-text">
                   <td className="p-3 text-ind-text-muted">{new Date(data.timestamp).toLocaleTimeString()}</td>
                   <td className="p-3">{data.tempWinding.toFixed(2)}</td>
-                  <td className="p-3">{data.tempBearing.toFixed(2)}</td>
-                  <td className="p-3">{data.tempAmbient.toFixed(2)}</td>
+                  <td className="p-3">{data.vibration.toFixed(2)}</td>
                   <td className="p-3">{data.current.toFixed(2)}</td>
                   <td className="p-3">{data.speed.toFixed(0)}</td>
-                  <td className="p-3">{(data.healthIndex * 100).toFixed(1)}%</td>
+                  <td className="p-3">{(data.overallHealth * 100).toFixed(1)}%</td>
                   <td className="p-3">
                     <span className={`px-2 py-0.5 rounded text-xs md:text-sm capitalize font-bold ${
                       data.status === 'healthy' ? 'bg-emerald-500/10 text-emerald-400' :
@@ -166,7 +149,7 @@ export function Analytics({ history, currentData }: { history: SensorData[], cur
               ))}
               {history.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="p-6 text-center text-ind-text-dim italic">No historical data available.</td>
+                  <td colSpan={7} className="p-6 text-center text-ind-text-dim italic">No historical data available.</td>
                 </tr>
               )}
             </tbody>

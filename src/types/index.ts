@@ -2,12 +2,23 @@ export type SystemStatus = 'healthy' | 'warning' | 'fault';
 
 export interface SensorData {
   timestamp: string;
-  tempWinding: number; // °C (MAX6675)
-  tempBearing: number; // °C (PT100)
-  tempAmbient: number; // °C (DB18B20)
-  current: number; // Amps
-  speed: number; // RPM
-  healthIndex: number; // 0.0 to 1.0
+  tempWinding: number;
+  tempBearing: number;
+  tempAmbient: number;
+  vibration: number;
+  current: number;
+  voltage: number;
+  pressure: number;
+  flowRate: number;
+  speed: number;
+  waterLevel: number;
+  oilQuality: number;
+  mechanicalHealth: number;
+  electricalHealth: number;
+  hydraulicHealth: number;
+  overallHealth: number;
+  pumpEfficiency: number;
+  powerConsumption: number;
   status: SystemStatus;
 }
 

@@ -22,7 +22,7 @@
   --theme-text-dim: #4a6070;
 }
 
-body.light-mode {
+:root.light-mode {
   --theme-bg: #f0f2f5;
   --theme-card: #ffffff;
   --theme-card-hover: #f8fafc;
@@ -63,7 +63,7 @@ body {
   transition: 0.3s;
 }
 
-body.light-mode .switch-label {
+:root.light-mode .switch-label {
   border-color: var(--light);
 }
 
