@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, BarChart2, Bell, Terminal, Wrench,
-  Settings, Info, ChevronLeft, ChevronRight, Wifi, WifiOff, Play, Pause, AlertTriangle, Database
+  Settings, Info, ChevronLeft, ChevronRight, Wifi, WifiOff, Play, Pause, AlertTriangle, Database, Lock, LogOut
 } from 'lucide-react';
 import { useMonitoring } from './hooks/useMonitoring';
 import { Dashboard } from './pages/Dashboard';
@@ -49,10 +49,87 @@ function Clock() {
   );
 }
 
+function LoginScreen({ onLogin }: { onLogin: () => void }) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (username === 'admin' && password === 'admin') {
+      onLogin();
+    } else {
+      setError('Invalid username or password');
+    }
+  };
+
+  return (
+    <div className="flex h-screen w-full items-center justify-center bg-ind-bg bg-opacity-95">
+      <div className="w-full max-w-md p-8 space-y-8 bg-ind-card border border-ind-border rounded-xl shadow-2xl">
+        <div className="text-center">
+          <div className="mx-auto h-12 w-12 bg-cyan-500/10 border border-cyan-500/40 rounded-full flex items-center justify-center mb-4">
+            <Lock className="h-6 w-6 text-cyan-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-ind-text tracking-wide">System Login</h2>
+          <p className="text-sm text-ind-text-dim mt-2">Sign in to access the PLC Predictive Maintenance Dashboard</p>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4 rounded-md shadow-sm">
+            <div>
+              <input
+                type="text"
+                required
+                className="w-full px-4 py-3 bg-ind-bg border border-ind-border rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 text-ind-text"
+                placeholder="Username (admin)"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+            <div>
+              <input
+                type="password"
+                required
+                className="w-full px-4 py-3 bg-ind-bg border border-ind-border rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 text-ind-text"
+                placeholder="Password (admin)"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {error && <div className="text-red-400 text-sm text-center font-semibold animate-pulse">{error}</div>}
+
+          <div>
+            <button
+              type="submit"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-bold text-white bg-cyan-600 hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-colors"
+            >
+              Sign in
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [page, setPage] = useState<Page>('dashboard');
   const [collapsed, setCollapsed] = useState(window.innerWidth < 768);
   const [isLightMode, setIsLightMode] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('isLoggedIn') === 'true';
+  });
+
+  const handleLogin = () => {
+    localStorage.setItem('isLoggedIn', 'true');
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false);
+  };
 
   useEffect(() => {
     if (isLightMode) {
@@ -80,6 +157,10 @@ export default function App() {
 
   const unackedFaults = alerts.filter(a => !a.acknowledged && a.type === 'fault').length;
   const unackedAlerts = alerts.filter(a => !a.acknowledged).length;
+
+  // if (!isLoggedIn) {
+  //   return <LoginScreen onLogin={handleLogin} />;
+  // }
 
   return (
     <div className="flex h-screen bg-ind-bg text-ind-text overflow-hidden">
@@ -133,12 +214,21 @@ export default function App() {
           })}
         </nav>
 
-        <button
-          onClick={() => setCollapsed(c => !c)}
-          className="m-2 p-2 rounded border border-ind-border text-ind-text-dim hover:text-[#7a8899] transition-all flex items-center justify-center cursor-pointer"
-        >
-          {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
-        </button>
+        <div className="flex flex-col gap-2 p-2">
+          <button
+            onClick={handleLogout}
+            className="p-2 rounded border border-ind-border text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all flex items-center justify-center cursor-pointer gap-2"
+          >
+            <LogOut size={14} />
+            {!collapsed && <span className="text-sm font-semibold">Logout</span>}
+          </button>
+          <button
+            onClick={() => setCollapsed(c => !c)}
+            className="p-2 rounded border border-ind-border text-ind-text-dim hover:text-[#7a8899] transition-all flex items-center justify-center cursor-pointer"
+          >
+            {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
+          </button>
+        </div>
       </motion.aside>
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
@@ -244,3 +334,4 @@ export default function App() {
     </div>
   );
 }
+

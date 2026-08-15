@@ -1,0 +1,1020 @@
+{
+"vibration": 13.30,
+"temperature": 35.50,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 18.68,
+"temperature": 35.75,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 7.70,
+"temperature": 35.75,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 63.98,
+"temperature": 35.75,
+"rpm": 53,
+"current": 0.00
+}
+{
+"vibration": 14.66,
+"temperature": 35.75,
+"rpm": 106,
+"current": 0.00
+}
+{
+"vibration": 0.96,
+"temperature": 35.25,
+"rpm": 226,
+"current": 3.48
+}
+{
+"vibration": 1266.40,
+"temperature": 35.50,
+"rpm": 1440,
+"current": 3.50
+}
+{
+"vibration": 844.21,
+"temperature": 36.00,
+"rpm": 1293,
+"current": 3.48
+}
+{
+"vibration": 4054.56,
+"temperature": 35.75,
+"rpm": 1306,
+"current": 3.49
+}
+{
+"vibration": 1197.57,
+"temperature": 35.25,
+"rpm": 1400,
+"current": 3.49
+}
+{
+"vibration": 750.65,
+"temperature": 35.75,
+"rpm": 1320,
+"current": 3.48
+}
+{
+"vibration": 504.17,
+"temperature": 36.00,
+"rpm": 1360,
+"current": 3.48
+}
+{
+"vibration": 1488.76,
+"temperature": 36.00,
+"rpm": 1400,
+"current": 3.49
+}
+{
+"vibration": 2457.64,
+"temperature": 35.25,
+"rpm": 1320,
+"current": 3.48
+}
+{
+"vibration": 1327.84,
+"temperature": 35.75,
+"rpm": 1360,
+"current": 3.48
+}
+{
+"vibration": 1619.72,
+"temperature": 35.50,
+"rpm": 1293,
+"current": 3.49
+}
+{
+"vibration": 1369.89,
+"temperature": 35.75,
+"rpm": 1386,
+"current": 3.49
+}
+{
+"vibration": 1137.85,
+"temperature": 35.75,
+"rpm": 1320,
+"current": 3.48
+}
+{
+"vibration": 1479.27,
+"temperature": 35.75,
+"rpm": 1400,
+"current": 3.49
+}
+{
+"vibration": 322.38,
+"temperature": 36.00,
+"rpm": 1333,
+"current": 3.48
+}
+{
+"vibration": 422.76,
+"temperature": 35.00,
+"rpm": 1280,
+"current": 3.47
+}
+{
+"vibration": 691.82,
+"temperature": 35.50,
+"rpm": 1293,
+"current": 3.47
+}
+{
+"vibration": 2372.41,
+"temperature": 35.50,
+"rpm": 1426,
+"current": 3.47
+}
+{
+"vibration": 591.66,
+"temperature": 35.50,
+"rpm": 1346,
+"current": 3.46
+}
+{
+"vibration": 1714.63,
+"temperature": 35.50,
+"rpm": 1400,
+"current": 3.47
+}
+{
+"vibration": 2469.99,
+"temperature": 35.50,
+"rpm": 1333,
+"current": 3.47
+}
+{
+"vibration": 321.90,
+"temperature": 36.00,
+"rpm": 1360,
+"current": 3.47
+}
+{
+"vibration": 2638.42,
+"temperature": 35.75,
+"rpm": 1333,
+"current": 3.48
+}
+{
+"vibration": 434.70,
+"temperature": 35.50,
+"rpm": 1346,
+"current": 3.47
+}
+{
+"vibration": 849.49,
+"temperature": 36.25,
+"rpm": 1400,
+"current": 3.47
+}
+{
+"vibration": 978.43,
+"temperature": 36.25,
+"rpm": 1306,
+"current": 3.47
+}
+{
+"vibration": 465.30,
+"temperature": 36.75,
+"rpm": 1293,
+"current": 3.48
+}
+{
+"vibration": 2096.83,
+"temperature": 37.25,
+"rpm": 1360,
+"current": 3.47
+}
+{
+"vibration": 2472.44,
+"temperature": 37.00,
+"rpm": 1386,
+"current": 3.47
+}
+{
+"vibration": 1013.92,
+"temperature": 37.75,
+"rpm": 1360,
+"current": 3.46
+}
+{
+"vibration": 563.29,
+"temperature": 38.50,
+"rpm": 1360,
+"current": 3.47
+}
+{
+"vibration": 634.72,
+"temperature": 39.00,
+"rpm": 1373,
+"current": 3.48
+}
+{
+"vibration": 2395.22,
+"temperature": 39.50,
+"rpm": 1360,
+"current": 3.47
+}
+{
+"vibration": 1863.23,
+"temperature": 39.50,
+"rpm": 1400,
+"current": 3.47
+}
+{
+"vibration": 1996.93,
+"temperature": 40.25,
+"rpm": 1520,
+"current": 3.46
+}
+{
+"vibration": 3078.73,
+"temperature": 41.00,
+"rpm": 1346,
+"current": 3.48
+}
+{
+"vibration": 692.67,
+"temperature": 41.25,
+"rpm": 1333,
+"current": 3.48
+}
+{
+"vibration": 1098.31,
+"temperature": 41.00,
+"rpm": 1346,
+"current": 3.49
+}
+{
+"vibration": 875.19,
+"temperature": 41.50,
+"rpm": 1360,
+"current": 3.49
+}
+{
+"vibration": 48.30,
+"temperature": 41.75,
+"rpm": 1373,
+"current": 3.48
+}
+{
+"vibration": 602.49,
+"temperature": 41.50,
+"rpm": 1306,
+"current": 3.47
+}
+{
+"vibration": 14.48,
+"temperature": 41.75,
+"rpm": 1400,
+"current": 3.48
+}
+{
+"vibration": 861.89,
+"temperature": 42.25,
+"rpm": 1240,
+"current": 3.47
+}
+{
+"vibration": 2288.49,
+"temperature": 42.00,
+"rpm": 1360,
+"current": 3.46
+}
+{
+"vibration": 810.49,
+"temperature": 42.50,
+"rpm": 1346,
+"current": 3.47
+}
+{
+"vibration": 1208.34,
+"temperature": 42.75,
+"rpm": 1360,
+"current": 3.48
+}
+{
+"vibration": 372.85,
+"temperature": 42.25,
+"rpm": 1413,
+"current": 3.48
+}
+{
+"vibration": 633.96,
+"temperature": 42.75,
+"rpm": 1360,
+"current": 3.48
+}
+{
+"vibration": 2024.01,
+"temperature": 43.00,
+"rpm": 1346,
+"current": 3.47
+}
+{
+"vibration": 1377.84,
+"temperature": 42.75,
+"rpm": 1360,
+"current": 3.46
+}
+{
+"vibration": 626.70,
+"temperature": 42.75,
+"rpm": 1400,
+"current": 3.47
+}
+{
+"vibration": 2447.39,
+"temperature": 43.25,
+"rpm": 1360,
+"current": 3.48
+}
+{
+"vibration": 446.67,
+"temperature": 43.50,
+"rpm": 1373,
+"current": 3.48
+}
+{
+"vibration": 1069.48,
+"temperature": 43.00,
+"rpm": 1413,
+"current": 3.47
+}
+{
+"vibration": 421.06,
+"temperature": 43.50,
+"rpm": 1320,
+"current": 3.46
+}
+{
+"vibration": 1354.07,
+"temperature": 43.50,
+"rpm": 1400,
+"current": 3.47
+}
+{
+"vibration": 3378.22,
+"temperature": 43.25,
+"rpm": 1333,
+"current": 3.47
+}
+{
+"vibration": 187.95,
+"temperature": 43.00,
+"rpm": 1400,
+"current": 3.48
+}
+{
+"vibration": 2167.32,
+"temperature": 43.25,
+"rpm": 1280,
+"current": 3.47
+}
+{
+"vibration": 1981.47,
+"temperature": 43.75,
+"rpm": 1360,
+"current": 3.46
+}
+{
+"vibration": 2703.99,
+"temperature": 43.25,
+"rpm": 1413,
+"current": 3.46
+}
+{
+"vibration": 2539.14,
+"temperature": 43.25,
+"rpm": 1426,
+"current": 3.46
+}
+{
+"vibration": 1121.34,
+"temperature": 43.75,
+"rpm": 1373,
+"current": 3.45
+}
+{
+"vibration": 483.83,
+"temperature": 44.00,
+"rpm": 1346,
+"current": 3.46
+}
+{
+"vibration": 615.04,
+"temperature": 43.75,
+"rpm": 1266,
+"current": 3.46
+}
+{
+"vibration": 973.16,
+"temperature": 43.25,
+"rpm": 1400,
+"current": 3.47
+}
+{
+"vibration": 775.78,
+"temperature": 43.75,
+"rpm": 1346,
+"current": 3.46
+}
+{
+"vibration": 1880.26,
+"temperature": 44.00,
+"rpm": 1320,
+"current": 3.44
+}
+{
+"vibration": 2500.59,
+"temperature": 43.50,
+"rpm": 1320,
+"current": 3.45
+}
+{
+"vibration": 186.43,
+"temperature": 43.50,
+"rpm": 19906,
+"current": 0.00
+}
+{
+"vibration": 39.07,
+"temperature": 43.75,
+"rpm": 1053,
+"current": 0.00
+}
+{
+"vibration": 50.18,
+"temperature": 44.00,
+"rpm": 560,
+"current": 0.00
+}
+{
+"vibration": 10.22,
+"temperature": 44.50,
+"rpm": 200,
+"current": 0.00
+}
+{
+"vibration": 57.03,
+"temperature": 44.25,
+"rpm": 26,
+"current": 0.00
+}
+{
+"vibration": 42.66,
+"temperature": 44.00,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 20.69,
+"temperature": 44.50,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 92.58,
+"temperature": 45.00,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 68.73,
+"temperature": 44.00,
+"rpm": 80,
+"current": 9.09
+}
+{
+"vibration": 2514.15,
+"temperature": 45.25,
+"rpm": 493,
+"current": 3.44
+}
+{
+"vibration": 3.59,
+"temperature": 45.25,
+"rpm": 1253,
+"current": 3.45
+}
+{
+"vibration": 1795.83,
+"temperature": 44.50,
+"rpm": 1293,
+"current": 3.46
+}
+{
+"vibration": 370.39,
+"temperature": 45.25,
+"rpm": 1333,
+"current": 3.45
+}
+{
+"vibration": 523.55,
+"temperature": 45.00,
+"rpm": 1333,
+"current": 3.45
+}
+{
+"vibration": 1603.04,
+"temperature": 44.50,
+"rpm": 1386,
+"current": 3.47
+}
+{
+"vibration": 238.73,
+"temperature": 44.75,
+"rpm": 1360,
+"current": 3.47
+}
+{
+"vibration": 1580.47,
+"temperature": 45.00,
+"rpm": 1333,
+"current": 3.46
+}
+{
+"vibration": 498.08,
+"temperature": 44.00,
+"rpm": 1426,
+"current": 3.47
+}
+{
+"vibration": 134.92,
+"temperature": 45.00,
+"rpm": 1306,
+"current": 3.47
+}
+{
+"vibration": 2237.83,
+"temperature": 45.00,
+"rpm": 1413,
+"current": 3.45
+}
+{
+"vibration": 484.12,
+"temperature": 45.00,
+"rpm": 1373,
+"current": 3.44
+}
+{
+"vibration": 1516.51,
+"temperature": 44.75,
+"rpm": 1333,
+"current": 3.45
+}
+{
+"vibration": 1362.31,
+"temperature": 44.50,
+"rpm": 1373,
+"current": 3.47
+}
+{
+"vibration": 862.13,
+"temperature": 44.50,
+"rpm": 1293,
+"current": 3.44
+}
+{
+"vibration": 3415.21,
+"temperature": 44.50,
+"rpm": 1333,
+"current": 3.46
+}
+{
+"vibration": 746.68,
+"temperature": 45.00,
+"rpm": 1333,
+"current": 3.46
+}
+{
+"vibration": 2298.13,
+"temperature": 44.25,
+"rpm": 1013,
+"current": 3.45
+}
+{
+"vibration": 471.91,
+"temperature": 45.00,
+"rpm": 586,
+"current": 3.46
+}
+{
+"vibration": 930.08,
+"temperature": 45.00,
+"rpm": 0,
+"current": 3.45
+}
+{
+"vibration": 1705.87,
+"temperature": 45.00,
+"rpm": 0,
+"current": 3.46
+}
+{
+"vibration": 1295.34,
+"temperature": 44.50,
+"rpm": 0,
+"current": 3.46
+}
+{
+"vibration": 10.30,
+"temperature": 45.00,
+"rpm": 0,
+"current": 3.47
+}
+{
+"vibration": 2203.50,
+"temperature": 44.75,
+"rpm": 0,
+"current": 3.47
+}
+{
+"vibration": 1355.89,
+"temperature": 45.50,
+"rpm": 706,
+"current": 3.46
+}
+{
+"vibration": 1572.98,
+"temperature": 44.50,
+"rpm": 600,
+"current": 3.47
+}
+{
+"vibration": 2485.78,
+"temperature": 44.75,
+"rpm": 920,
+"current": 3.47
+}
+{
+"vibration": 1143.56,
+"temperature": 45.50,
+"rpm": 1320,
+"current": 3.47
+}
+{
+"vibration": 89.87,
+"temperature": 45.00,
+"rpm": 1386,
+"current": 3.48
+}
+{
+"vibration": 266.05,
+"temperature": 45.75,
+"rpm": 1346,
+"current": 3.48
+}
+{
+"vibration": 114.82,
+"temperature": 45.00,
+"rpm": 1386,
+"current": 3.48
+}
+{
+"vibration": 2568.44,
+"temperature": 45.25,
+"rpm": 1346,
+"current": 3.48
+}
+{
+"vibration": 2101.89,
+"temperature": 45.00,
+"rpm": 1373,
+"current": 3.47
+}
+{
+"vibration": 1498.90,
+"temperature": 45.50,
+"rpm": 1386,
+"current": 3.48
+}
+{
+"vibration": 1605.69,
+"temperature": 45.25,
+"rpm": 1333,
+"current": 3.48
+}
+{
+"vibration": 1579.44,
+"temperature": 45.25,
+"rpm": 1400,
+"current": 3.48
+}
+{
+"vibration": 672.59,
+"temperature": 45.75,
+"rpm": 1280,
+"current": 3.47
+}
+{
+"vibration": 727.53,
+"temperature": 45.75,
+"rpm": 1346,
+"current": 3.47
+}
+{
+"vibration": 2459.95,
+"temperature": 45.75,
+"rpm": 1320,
+"current": 3.46
+}
+{
+"vibration": 1006.00,
+"temperature": 45.75,
+"rpm": 1386,
+"current": 3.46
+}
+{
+"vibration": 1371.35,
+"temperature": 45.75,
+"rpm": 1333,
+"current": 3.46
+}
+{
+"vibration": 388.23,
+"temperature": 45.75,
+"rpm": 1320,
+"current": 3.47
+}
+{
+"vibration": 3093.70,
+"temperature": 45.75,
+"rpm": 1426,
+"current": 3.47
+}
+{
+"vibration": 917.45,
+"temperature": 45.25,
+"rpm": 1386,
+"current": 3.46
+}
+{
+"vibration": 1369.88,
+"temperature": 46.00,
+"rpm": 1346,
+"current": 3.46
+}
+{
+"vibration": 92.32,
+"temperature": 45.75,
+"rpm": 1280,
+"current": 3.46
+}
+{
+"vibration": 484.11,
+"temperature": 46.00,
+"rpm": 1413,
+"current": 3.46
+}
+{
+"vibration": 1688.27,
+"temperature": 46.00,
+"rpm": 1333,
+"current": 3.45
+}
+{
+"vibration": 470.95,
+"temperature": 46.00,
+"rpm": 1413,
+"current": 3.46
+}
+{
+"vibration": 282.33,
+"temperature": 45.50,
+"rpm": 1333,
+"current": 3.47
+}
+{
+"vibration": 1197.88,
+"temperature": 46.00,
+"rpm": 1373,
+"current": 3.46
+}
+{
+"vibration": 288.87,
+"temperature": 46.00,
+"rpm": 1346,
+"current": 3.44
+}
+{
+"vibration": 198.26,
+"temperature": 46.00,
+"rpm": 1386,
+"current": 3.46
+}
+{
+"vibration": 1065.19,
+"temperature": 46.25,
+"rpm": 1346,
+"current": 3.46
+}
+{
+"vibration": 2234.15,
+"temperature": 46.00,
+"rpm": 1360,
+"current": 3.46
+}
+{
+"vibration": 767.12,
+"temperature": 45.75,
+"rpm": 1306,
+"current": 3.47
+}
+{
+"vibration": 2526.82,
+"temperature": 46.00,
+"rpm": 1320,
+"current": 3.46
+}
+{
+"vibration": 1370.75,
+"temperature": 46.25,
+"rpm": 1360,
+"current": 3.45
+}
+{
+"vibration": 464.30,
+"temperature": 45.25,
+"rpm": 1253,
+"current": 3.46
+}
+{
+"vibration": 2515.88,
+"temperature": 46.25,
+"rpm": 1306,
+"current": 3.45
+}
+{
+"vibration": 279.79,
+"temperature": 46.25,
+"rpm": 1360,
+"current": 3.46
+}
+{
+"vibration": 1906.19,
+"temperature": 46.00,
+"rpm": 1426,
+"current": 3.46
+}
+{
+"vibration": 755.51,
+"temperature": 46.25,
+"rpm": 1346,
+"current": 3.47
+}
+{
+"vibration": 160.92,
+"temperature": 46.25,
+"rpm": 1373,
+"current": 3.47
+}
+{
+"vibration": 1764.12,
+"temperature": 46.25,
+"rpm": 1373,
+"current": 3.45
+}
+{
+"vibration": 134.58,
+"temperature": 46.25,
+"rpm": 4520,
+"current": 0.00
+}
+{
+"vibration": 58.24,
+"temperature": 46.25,
+"rpm": 813,
+"current": 0.00
+}
+{
+"vibration": 100.67,
+"temperature": 46.00,
+"rpm": 413,
+"current": 0.00
+}
+{
+"vibration": 58.52,
+"temperature": 46.50,
+"rpm": 120,
+"current": 0.00
+}
+{
+"vibration": 17.83,
+"temperature": 47.00,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 14.98,
+"temperature": 46.75,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 23.97,
+"temperature": 47.25,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 60.50,
+"temperature": 47.50,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 100.88,
+"temperature": 48.00,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 31.59,
+"temperature": 48.00,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 18.04,
+"temperature": 47.50,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 0.14,
+"temperature": 44.75,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 78.35,
+"temperature": 42.75,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 98.79,
+"temperature": 41.25,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 27.90,
+"temperature": 40.00,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 43.90,
+"temperature": 38.75,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 2.39,
+"temperature": 38.75,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 71.56,
+"temperature": 38.50,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 93.80,
+"temperature": 37.75,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 104.70,
+"temperature": 37.75,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 101.29,
+"temperature": 37.50,
+"rpm": 0,
+"current": 0.00
+}
+{
+"vibration": 86.48,
+"temperature": 37.00,
+"rpm": 0,
+"current": 0.00
+}

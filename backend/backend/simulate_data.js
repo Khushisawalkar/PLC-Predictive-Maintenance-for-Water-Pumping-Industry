@@ -1,7 +1,7 @@
 const fs = require('fs');
 const axios = require('axios');
 
-const rawData = fs.readFileSync('user_data.json', 'utf8');
+const rawData = fs.readFileSync('history.json', 'utf8');
 const data = JSON.parse(rawData);
 
 let currentIndex = 0;

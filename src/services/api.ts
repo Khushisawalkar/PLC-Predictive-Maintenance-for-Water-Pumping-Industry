@@ -92,6 +92,23 @@ function mapToSensorData(item: any): SensorData {
   };
 }
 
+function generateMockHistory(): SensorData[] {
+  const mockData: SensorData[] = [];
+  const now = new Date();
+  
+  for (let i = 100; i >= 0; i--) {
+    const timestamp = new Date(now.getTime() - i * 3000).toISOString();
+    mockData.push(mapToSensorData({
+      createdAt: timestamp,
+      temperature: 42 + (Math.random() - 0.5) * 2,
+      current: 3.8 + (Math.random() - 0.5) * 0.2,
+      speed: 1450 + (Math.random() - 0.5) * 20,
+      vibration: 1800 + (Math.random() - 0.5) * 200
+    }));
+  }
+  return mockData;
+}
+
 export const apiService = {
   getLatestData: async (): Promise<SensorData | null> => {
     try {
@@ -121,13 +138,13 @@ export const apiService = {
       }
       const data = await response.json();
       
-      if (Array.isArray(data)) {
+      if (Array.isArray(data) && data.length > 0) {
         return data.map(item => mapToSensorData(item));
       }
-      return [];
+      return generateMockHistory();
     } catch (error) {
       console.error("Error fetching history:", error);
-      return [];
+      return generateMockHistory();
     }
   },
 
